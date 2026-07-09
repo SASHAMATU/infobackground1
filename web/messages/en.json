@@ -1,0 +1,248 @@
+{
+  "meta": {
+    "title": "Infobackground — Websites and landing pages that sell",
+    "desc": "We build landing pages and websites for businesses and solo entrepreneurs. Fast — from 7 days, high quality — custom design, affordable — a fixed quote before we start."
+  },
+  "nav": {
+    "approach": "Approach",
+    "services": "Services",
+    "process": "Process",
+    "whyus": "Why us",
+    "testimonials": "Reviews",
+    "contacts": "Contacts"
+  },
+  "header": {
+    "cta": "Discuss a project"
+  },
+  "hero": {
+    "eyebrow": "Landing pages · Websites · For business",
+    "title": "We build websites <drama>that sell.</drama>",
+    "sub": "Landing pages and websites for businesses and solo entrepreneurs: fast, high-quality and without astronomical budgets. From the first call to launch — 7–14 days.",
+    "cta1": "Discuss a project",
+    "cta2": "View services",
+    "stack": "Stack"
+  },
+  "approach": {
+    "eyebrow": "Approach",
+    "small": "They say: “fast, good, cheap — pick two.”",
+    "big": "We built our process so you <drama>don’t have to pick.</drama>",
+    "lead": "We don’t sell “digital transformation” or 60-slide decks. We design every website for one goal: turning traffic into leads. Structure, copy, design and launch — one team, no months of approvals."
+  },
+  "p1": {
+    "t": "Fast",
+    "d": "A one-pager takes 5–7 days, a landing page 7–14. Every stage has a date and an owner. If a deadline shifts, we tell you first — no chasing needed."
+  },
+  "p2": {
+    "t": "High quality",
+    "d": "Custom design, not an “everyone has it” template. Structure and prototype are approved before design, so there are no last-minute rebuilds."
+  },
+  "p3": {
+    "t": "Affordable",
+    "d": "A transparent quote before we start: fixed price, no “we’ll clarify in a meeting”. 30 days of free fixes after launch."
+  },
+  "services": {
+    "eyebrow": "Services",
+    "title": "Formats that cover 90% of needs",
+    "lead": "Each with a fixed timeline, a clear price and post-launch support. No “we’ll clarify in a meeting”."
+  },
+  "s": {
+    "from": "from",
+    "cta": "Discuss"
+  },
+  "s1": {
+    "days": "5–7 days",
+    "t": "One-pager / promo site",
+    "d": "A clean one-page site about a company, specialist or product. Enough to be found and contacted.",
+    "li1": "1–3 screens: about you, services, contacts",
+    "li2": "Design in your brand colors",
+    "li3": "Lead form and messengers",
+    "li4": "Domain, hosting, turnkey launch"
+  },
+  "s2": {
+    "days": "7–14 days",
+    "badge": "Popular",
+    "t": "Turnkey landing page",
+    "d": "A modern landing page ready for paid traffic: selling structure, custom design and a lead form integrated with your CRM.",
+    "li1": "Structure and prototype approved before design",
+    "li2": "Custom design (not an “everyone has it” template)",
+    "li3": "Responsive for mobile / tablet",
+    "li4": "Analytics, forms and automations wired in"
+  },
+  "s3": {
+    "days": "14–21 days",
+    "t": "Multi-page website",
+    "d": "A full company website: services, case studies, blog. Design system, fast loading and an SEO foundation.",
+    "li1": "Up to 10 pages: services, cases, about",
+    "li2": "A single design system for your brand",
+    "li3": "SEO basics: speed, markup, meta tags",
+    "li4": "CMS — edit content yourself, no developer"
+  },
+  "s4": {
+    "days": "5–10 days",
+    "t": "Redesign of an existing website",
+    "d": "We refresh the visuals and structure of a site that stopped bringing in leads. We keep what already works and remove what's holding back conversion.",
+    "li1": "Audit of the current site and its lead-loss points",
+    "li2": "A new design on top of the existing structure",
+    "li3": "Faster loading and mobile-ready responsiveness",
+    "li4": "Content migration without losing SEO"
+  },
+  "process": {
+    "eyebrow": "Process",
+    "title": "How a website is born",
+    "lead": "Four steps from request to launch. You see the result at each one — no “we’re working on it, please wait”."
+  },
+  "st1": {
+    "t": "Request and brief",
+    "d": "A 20-minute call or a Telegram chat. We lock the website’s goal, timeline and quote — before work starts."
+  },
+  "st2": {
+    "t": "Prototype and copy",
+    "d": "Selling structure and copy for every screen — before design. Approved upfront so nothing gets rebuilt later."
+  },
+  "st3": {
+    "t": "Design and build",
+    "d": "Custom design, animations, mobile-ready. We show progress every 2–3 days."
+  },
+  "st4": {
+    "t": "Launch and support",
+    "d": "Domain, analytics, forms, CRM integrations. Then 30 days of free fixes after launch."
+  },
+  "why": {
+    "eyebrow": "Why us",
+    "title": "Numbers you can rely on",
+    "lead": "No “in business since 2008”. Real results from recent years — the thing that actually shows the level."
+  },
+  "n1": {
+    "t": "Websites and landing pages",
+    "d": "launched for businesses and independent professionals"
+  },
+  "n2": {
+    "t": "Days — minimum timeline",
+    "d": "from brief to a working one-pager"
+  },
+  "n3": {
+    "t": "Best landing page conversion",
+    "d": "with a market average of 1.5–3% on paid traffic"
+  },
+  "n4": {
+    "t": "Days of free support",
+    "d": "after launch we fix anything that misbehaves"
+  },
+  "f": {
+    "eyebrow": "Founder",
+    "title": "Aleksandr Matochkin",
+    "quote": "“Every project is treated like a website for <accent>our best friend.”</accent>",
+    "text": "I’ve been building websites and automations for businesses for 4 years. I run every project personally — from the first call to launch. Most clients come through referrals, so cutting corners simply doesn’t pay.",
+    "name": "Aleksandr Matochkin",
+    "role": "founder · 4 years in AI and web",
+    "alt": "Aleksandr Matochkin — founder of Infobackground"
+  },
+  "t": {
+    "eyebrow": "Reviews",
+    "title": "What our clients say after launch",
+    "lead": "No “reviews under NDA, trust us”. Real words from real clients after launch.",
+    "prev": "Previous testimonial",
+    "next": "Next testimonial"
+  },
+  "t0": {
+    "q": "“I want to say a huge thank you for building and designing the website! The brief wasn't simple — to convey a feeling of care, aesthetics and top-level service through a screen. The result <accent>exceeded every expectation</accent>: the site turned out stylish, modern and genuinely easy to use. The design decisions, typography, responsiveness — all done at the highest level. I'm already hearing a lot of warm feedback about the site from clients.”",
+    "name": "Svetlana",
+    "role": "founder of revive_by_svetlana"
+  },
+  "t1": {
+    "q": "“We ordered a landing page for a new product line. Delivered faster than promised, and above all — it actually works. Conversion to lead is <accent>6.2%</accent> — the previous site had 1.8%. Paid traffic finally pays off.”",
+    "name": "Mikhail Drozdov",
+    "role": "CEO of aksess.shop"
+  },
+  "t2": {
+    "q": "“We needed a website for an online school. The team proposed a structure we hadn’t even imagined and launched in <accent>12 days</accent>. A month later our cost per lead dropped by a third.”",
+    "name": "Elena Karpova",
+    "role": "founder of the online school “Grani”"
+  },
+  "faq": {
+    "eyebrow": "FAQ",
+    "title": "Questions we get before the start"
+  },
+  "q1": {
+    "q": "How much does a website cost?",
+    "a": "A one-pager from €400, a turnkey landing page from €800, a multi-page website from €1500. The exact quote comes after a short brief, is fixed before we start and doesn’t change midway."
+  },
+  "q2": {
+    "q": "What are the timelines?",
+    "a": "A one-pager — 5–7 days, a landing page — 7–14, a multi-page site — 14–21. The launch date is fixed upfront. If it shifts, we tell you first."
+  },
+  "q3": {
+    "q": "What do you build websites with?",
+    "a": "Custom code without builders — when speed and uniqueness matter, or Tilda / Webflow — when you want to edit things yourself later. We recommend the right fit on the first call."
+  },
+  "q4": {
+    "q": "What do you need from me?",
+    "a": "20 minutes for the brief, materials about your product (photos, prices, reviews — whatever you have) and feedback at two checkpoints: after the prototype and after the design. The rest is on us."
+  },
+  "q5": {
+    "q": "What happens after launch?",
+    "a": "For 30 days we fix anything that breaks or misbehaves for free. After that — support at a fixed price, no subscriptions. Domain and hosting are registered to you — the website is fully yours."
+  },
+  "c": {
+    "eyebrow": "Request",
+    "title": "Tell us about your task — we’ll propose a solution in 24 hours",
+    "lead": "Describe the website you need. The next day we come back with a short structure, timeline and price. No 90-minute calls.",
+    "reply": {
+      "label": "We reply",
+      "value": "within 24 hours, Mon–Fri"
+    }
+  },
+  "form": {
+    "name": {
+      "label": "Name",
+      "ph": "How should we call you",
+      "err": "Please enter a name"
+    },
+    "contact": {
+      "label": "Telegram or phone",
+      "ph": "@username or +1…",
+      "err": "We need a way to reach you"
+    },
+    "service": {
+      "label": "Website type",
+      "opt0": "Pick a format",
+      "opt1": "Turnkey landing page",
+      "opt2": "One-pager / promo site",
+      "opt3": "Multi-page website",
+      "opt4": "Redesign of an existing site",
+      "opt5": "Other / not sure yet",
+      "err": "Pick a format"
+    },
+    "task": {
+      "label": "Describe the task",
+      "ph": "E.g.: I need a landing page for a nail studio — booking via Telegram, and I want to collect leads from Instagram ads",
+      "err": "Tell us briefly what you need"
+    },
+    "budget": {
+      "label": "Budget",
+      "opt": "(optional)",
+      "ph": "E.g.: up to €1000"
+    },
+    "submit": "Send request",
+    "note": "By submitting the form, you agree to data processing",
+    "success": "✓ Got it. We’ll reply within 24 hours via Telegram.",
+    "error": "Couldn't send your request. Please try again or message us on Telegram — @infobackground.",
+    "honeypot": {
+      "label": "Leave this field empty"
+    }
+  },
+  "footer": {
+    "about": "A studio for websites and landing pages. We help founders and teams get leads from the internet — fast, high-quality and without astronomical budgets.",
+    "col": {
+      "services": "Services",
+      "contacts": "Contacts",
+      "nav": "Navigation"
+    },
+    "s1": "Turnkey landing pages",
+    "s2": "One-pagers",
+    "s3": "Multi-page websites",
+    "s4": "Redesign",
+    "copyright": "© 2026 Infobackground · Websites and landing pages for your business",
+    "status": "All systems operational"
+  }
+}

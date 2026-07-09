@@ -1,0 +1,1591 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Infobackground — Сайты и лендинги, которые продают</title>
+  <meta name="description" content="Делаем лендинги и сайты для бизнеса и частных предпринимателей. Быстро — от 7 дней, качественно — уникальный дизайн, недорого — фиксированная смета до старта."/>
+  <meta property="og:title" content="Infobackground — Сайты и лендинги, которые продают"/>
+  <meta property="og:description" content="Лендинги и сайты для бизнеса: быстро, качественно и без космических бюджетов. От брифа до запуска — 7–14 дней."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:image" content="assets/hero-poster.jpg"/>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23071518'/%3E%3Ctext x='32' y='44' font-family='Arial,sans-serif' font-size='30' font-weight='800' fill='%23F6A81F' text-anchor='middle'%3Eib%3C/text%3E%3C/svg%3E"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@1,500;1,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link rel="preload" as="image" href="assets/hero-poster.jpg" fetchpriority="high"/>
+  <style>
+    /* ============ TOKENS ============ */
+    :root{
+      --bg:#071518;
+      --bg-2:#0a1e23;
+      --bg-3:#0d252b;
+      --surface:rgba(242,239,230,.03);
+      --line:rgba(242,239,230,.09);
+      --line-strong:rgba(242,239,230,.16);
+      --text:#f2efe6;
+      --muted:#93a6a4;
+      --amber:#f6a81f;
+      --orange:#ff5c1e;
+      --red:#c2261f;
+      --sans:'Manrope',-apple-system,'Helvetica Neue',sans-serif;
+      --serif:'Playfair Display',Georgia,serif;
+      --mono:'JetBrains Mono','SF Mono',monospace;
+      --ease:cubic-bezier(.16,1,.3,1);
+      --r:14px;
+    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    html,body{background:var(--bg)}
+    body{
+      font-family:var(--sans);color:var(--text);
+      font-size:16px;line-height:1.6;
+      -webkit-font-smoothing:antialiased;
+      overflow-x:hidden;
+    }
+    ::selection{background:var(--amber);color:#071518}
+    a{color:inherit;text-decoration:none}
+    ul{list-style:none}
+    img,video{max-width:100%;display:block}
+    button{font-family:inherit;cursor:pointer}
+    :focus-visible{outline:2px solid var(--amber);outline-offset:3px;border-radius:4px}
+
+    /* ============ NOISE OVERLAY ============ */
+    .noise{
+      position:fixed;inset:0;z-index:200;pointer-events:none;opacity:.05;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* ============ PRELOADER ============ */
+    .preloader{
+      position:fixed;inset:0;z-index:400;background:var(--bg);
+      display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;
+      transition:transform .7s var(--ease);
+    }
+    .preloader.is-done{transform:translateY(-100%)}
+    .preloader__mark{font-weight:800;font-size:clamp(20px,3vw,28px);letter-spacing:-.02em}
+    .preloader__mark em{font-style:normal;color:var(--amber)}
+    .preloader__bar{width:min(240px,60vw);height:1px;background:var(--line-strong);position:relative;overflow:hidden}
+    .preloader__bar i{position:absolute;inset:0;background:var(--amber);transform-origin:left;transform:scaleX(0)}
+    .preloader__pct{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.14em}
+
+    /* ============ CURSOR ============ */
+    .cursor{display:none}
+    @media (pointer:fine){
+      .cursor{
+        display:block;position:fixed;top:0;left:0;z-index:300;pointer-events:none;
+        width:10px;height:10px;border-radius:50%;background:var(--amber);
+        transform:translate(-50%,-50%);
+        transition:width .25s var(--ease),height .25s var(--ease),opacity .25s;
+      }
+      .cursor.is-active{width:26px;height:26px;opacity:.55}
+    }
+
+    /* ============ LAYOUT ============ */
+    .wrap{width:min(1200px,calc(100% - 48px));margin:0 auto}
+    section{padding:clamp(90px,12vh,150px) 0;position:relative;scroll-margin-top:96px}
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:10px;
+      font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+      color:var(--amber);margin-bottom:26px;
+    }
+    .eyebrow::before{content:"";width:26px;height:1px;background:var(--amber)}
+    .h2{
+      font-size:clamp(30px,4.6vw,54px);font-weight:800;letter-spacing:-.03em;line-height:1.08;
+      max-width:17ch;
+    }
+    .h2 .accent{color:var(--amber)}
+    .h2 .drama{font-family:var(--serif);font-style:italic;font-weight:600;letter-spacing:-.01em}
+    .lead{color:var(--muted);max-width:56ch;margin-top:22px;font-size:clamp(15px,1.4vw,18px)}
+
+    /* ============ REVEAL ============ */
+    .reveal{opacity:0;transform:translateY(26px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+    .reveal[data-reveal="down"]{transform:translateY(-26px)}
+    .reveal[data-reveal="left"]{transform:translateX(-38px)}
+    .reveal[data-reveal="right"]{transform:translateX(38px)}
+    .reveal[data-reveal="scale"]{transform:scale(.92)}
+    .reveal.is-visible{opacity:1;transform:none}
+    .reveal[data-d="1"]{transition-delay:.08s}.reveal[data-d="2"]{transition-delay:.16s}
+    .reveal[data-d="3"]{transition-delay:.24s}.reveal[data-d="4"]{transition-delay:.32s}
+
+    /* ============ BUTTONS ============ */
+    .btn{
+      display:inline-flex;align-items:center;gap:12px;
+      padding:16px 28px;border-radius:12px;border:1px solid transparent;
+      font-weight:700;font-size:15px;letter-spacing:-.01em;
+      position:relative;overflow:hidden;
+      transition:transform .35s cubic-bezier(.25,.46,.45,.94),background .3s,color .3s,border-color .3s,box-shadow .35s;
+    }
+    .btn:hover{transform:translateY(-2px) scale(1.03)}
+    .btn:active{transform:scale(.98)}
+    .btn--primary{background:var(--amber);color:#071518;box-shadow:0 10px 30px -12px rgba(246,168,31,.5)}
+    .btn--primary:hover{box-shadow:0 16px 40px -10px rgba(246,168,31,.65)}
+    .btn--primary span{position:relative;z-index:1}
+    .btn--primary::after{
+      content:"";position:absolute;inset:0;background:var(--orange);
+      transform:translateX(-101%);transition:transform .4s var(--ease);
+    }
+    .btn--primary:hover::after{transform:none}
+    .btn--primary svg{position:relative;z-index:1}
+    .btn--ghost{border-color:var(--line-strong);color:var(--text);background:transparent}
+    .btn--ghost:hover{border-color:var(--amber);color:var(--amber)}
+    .btn svg{width:16px;height:16px;flex:none}
+
+    /* ============ HEADER ============ */
+    .header{
+      position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:120;
+      width:min(1240px,calc(100% - 24px));
+      display:flex;align-items:center;justify-content:space-between;gap:16px;
+      padding:12px 20px;border-radius:18px;border:1px solid transparent;
+      transition:background .4s,border-color .4s,backdrop-filter .4s;
+    }
+    .header.is-scrolled{
+      background:rgba(7,21,24,.72);border-color:var(--line);
+      backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+    }
+    .logo{font-weight:800;font-size:19px;letter-spacing:-.02em;white-space:nowrap}
+    .logo em{font-style:normal;color:var(--amber)}
+    .nav{display:flex;align-items:center;gap:30px}
+    .nav a{
+      font-size:13.5px;font-weight:600;color:var(--muted);position:relative;
+      transition:color .25s,transform .25s;
+    }
+    .nav a:hover{color:var(--text);transform:translateY(-1px)}
+    .header__right{display:flex;align-items:center;gap:14px}
+    .lang{display:flex;gap:2px;border:1px solid var(--line);border-radius:10px;padding:3px}
+    .lang button{
+      background:none;border:0;color:var(--muted);font-family:var(--mono);
+      font-size:11px;letter-spacing:.08em;padding:6px 9px;border-radius:7px;
+      transition:color .25s,background .25s;
+    }
+    .lang button:hover{color:var(--text)}
+    .lang button.is-active{background:var(--amber);color:#071518}
+    .header .btn{padding:11px 20px;font-size:13.5px;border-radius:11px}
+    .burger{display:none;background:none;border:0;width:40px;height:40px;position:relative;z-index:130}
+    .burger i,.burger::before,.burger::after{
+      content:"";position:absolute;left:9px;right:9px;height:2px;background:var(--text);
+      border-radius:2px;transition:transform .35s var(--ease),opacity .25s,top .35s var(--ease);
+    }
+    .burger::before{top:14px}.burger i{top:19px}.burger::after{top:24px}
+    .burger.is-open::before{top:19px;transform:rotate(45deg)}
+    .burger.is-open i{opacity:0}
+    .burger.is-open::after{top:19px;transform:rotate(-45deg)}
+
+    @media (max-width:960px){
+      .nav{
+        position:fixed;inset:0;background:rgba(7,21,24,.97);
+        flex-direction:column;justify-content:center;gap:30px;
+        opacity:0;pointer-events:none;transition:opacity .35s;
+      }
+      .nav.is-open{opacity:1;pointer-events:auto}
+      .nav a{font-size:22px;color:var(--text);padding:6px 0}
+      .burger{display:block}
+      .header .btn{display:none}
+      .lang button{padding:10px 12px;min-width:38px}
+    }
+
+    /* ============ HERO ============ */
+    .hero{
+      min-height:100dvh;display:flex;flex-direction:column;justify-content:flex-end;
+      padding:0 0 34px;position:relative;overflow:hidden;isolation:isolate;
+    }
+    .hero__media{position:absolute;inset:0;z-index:-3;background:url("assets/hero-poster.jpg") center/cover no-repeat;will-change:transform}
+    .hero__media video,.hero__media img{
+      width:100%;height:100%;object-fit:cover;object-position:62% 50%;
+    }
+    .hero__media video{opacity:0;transition:opacity 1.1s var(--ease)}
+    .hero__media video.is-ready{opacity:1}
+    .hero__shade{
+      position:absolute;inset:0;z-index:-2;
+      background:
+        linear-gradient(to top,var(--bg) 4%,rgba(7,21,24,.55) 38%,rgba(7,21,24,.25) 70%,rgba(7,21,24,.55)),
+        linear-gradient(100deg,rgba(7,21,24,.92) 22%,rgba(7,21,24,.35) 52%,rgba(7,21,24,.1));
+    }
+    /* ambient glow blobs */
+    .hero__glow{position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none;transition:transform .6s var(--ease)}
+    .hero__glow span{position:absolute;border-radius:50%;filter:blur(70px);will-change:transform}
+    .hero__glow span:nth-child(1){width:52vw;height:52vw;max-width:620px;max-height:620px;top:-18%;right:-12%;background:radial-gradient(circle,rgba(246,168,31,.14),transparent 70%);animation:driftA 22s ease-in-out infinite}
+    .hero__glow span:nth-child(2){width:42vw;height:42vw;max-width:480px;max-height:480px;bottom:-16%;left:-10%;background:radial-gradient(circle,rgba(255,92,30,.1),transparent 70%);animation:driftB 26s ease-in-out infinite}
+    .hero__glow span:nth-child(3){width:26vw;height:26vw;max-width:320px;max-height:320px;top:36%;left:46%;background:radial-gradient(circle,rgba(194,38,31,.08),transparent 70%);animation:driftA 30s ease-in-out infinite reverse}
+    @keyframes driftA{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(-34px,26px,0)}}
+    @keyframes driftB{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(28px,-30px,0)}}
+    /* floating decorative accents */
+    .hero__deco{position:absolute;inset:0;z-index:0;pointer-events:none}
+    .hero__ring{position:absolute;border:1px solid rgba(246,168,31,.28);border-radius:50%;animation:floaty 7s ease-in-out infinite}
+    .hero__ring--a{width:120px;height:120px;top:20%;right:11%;animation-delay:.15s}
+    .hero__ring--b{width:60px;height:60px;top:58%;right:23%;border-color:rgba(255,92,30,.32);animation-delay:1.3s}
+    .hero__dot{position:absolute;width:6px;height:6px;top:38%;right:16%;border-radius:50%;background:var(--amber);box-shadow:0 0 26px 5px rgba(246,168,31,.55);animation:floaty 5s ease-in-out infinite .4s}
+    @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-18px)}}
+    .hero .wrap{display:flex;flex-direction:column;justify-content:flex-end;flex:1;padding-top:130px;position:relative;z-index:1}
+    .hero__eyebrow.hero__eyebrow{
+      align-self:flex-start;
+      margin-bottom:28px;padding:9px 26px 9px 14px;border-radius:100px;
+      background:rgba(242,239,230,.06);border:1px solid var(--line-strong);
+      backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+      box-shadow:0 4px 24px -8px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.05);
+    }
+    .hero__title{
+      font-size:clamp(42px,7.4vw,96px);font-weight:800;letter-spacing:-.035em;line-height:1.02;
+      max-width:13ch;
+    }
+    .hero__title .drama{
+      font-family:var(--serif);font-style:italic;font-weight:600;color:var(--amber);
+      letter-spacing:-.015em;text-shadow:0 0 46px rgba(246,168,31,.35);
+    }
+    .hero__sub{color:#c4d2cf;max-width:52ch;margin-top:26px;font-size:clamp(15px,1.5vw,18px)}
+    .hero__cta{display:flex;gap:14px;margin-top:36px;flex-wrap:wrap}
+    .hero__stack{
+      margin-top:60px;border:1px solid var(--line-strong);border-radius:16px;
+      background:rgba(7,21,24,.5);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+      display:flex;align-items:center;overflow:hidden;
+      box-shadow:0 24px 60px -24px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.06);
+      transition:border-color .35s,box-shadow .35s;
+    }
+    .hero__stack:hover{border-color:rgba(246,168,31,.4);box-shadow:0 24px 60px -20px rgba(0,0,0,.65),inset 0 1px 0 rgba(255,255,255,.08)}
+    .hero__stack-label{
+      flex:none;font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+      color:var(--muted);padding:0 22px;border-right:1px solid var(--line);
+    }
+    .marquee{overflow:hidden;flex:1;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+    .marquee__track{display:flex;gap:12px;width:max-content;padding:12px 0;animation:marquee 28s linear infinite}
+    .marquee:hover .marquee__track{animation-play-state:paused}
+    @keyframes marquee{to{transform:translateX(-50%)}}
+    .chip{
+      flex:none;display:inline-flex;align-items:center;gap:8px;
+      font-size:13px;font-weight:600;color:#c4d2cf;
+      border:1px solid var(--line);border-radius:10px;padding:8px 16px;
+      transition:color .25s,border-color .25s,transform .3s var(--ease);
+    }
+    .chip:hover{color:var(--amber);border-color:var(--amber);transform:translateY(-2px)}
+    .chip i{width:6px;height:6px;border-radius:50%;background:var(--orange);flex:none;font-style:normal}
+    .hero__scroll{
+      position:absolute;right:34px;bottom:120px;z-index:1;
+      font-family:var(--mono);font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);
+      writing-mode:vertical-rl;display:flex;align-items:center;gap:12px;
+    }
+    .hero__scroll::after{content:"";width:1px;height:52px;background:linear-gradient(var(--amber),transparent);animation:drip 2.2s var(--ease) infinite}
+    @keyframes drip{0%{transform:scaleY(0);transform-origin:top}55%{transform:scaleY(1);transform-origin:top}56%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+    @media (max-width:700px){.hero__scroll{display:none}.hero__stack-label{display:none}.hero__ring,.hero__dot{display:none}}
+    @media (max-width:420px){.hero .wrap{padding-top:110px}.hero__stack{margin-top:44px}}
+
+    /* ============ APPROACH / MANIFESTO ============ */
+    .manifesto{background:var(--bg)}
+    .manifesto__small{color:var(--muted);font-size:clamp(17px,2vw,22px);max-width:44ch}
+    .manifesto__big{
+      font-size:clamp(34px,5.6vw,68px);font-weight:800;letter-spacing:-.035em;line-height:1.05;
+      margin-top:18px;max-width:20ch;
+    }
+    .manifesto__big .drama{font-family:var(--serif);font-style:italic;font-weight:600;color:var(--amber)}
+    .principles{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:calc(var(--r) + 4px);overflow:hidden;margin-top:64px}
+    .principle{
+      background:linear-gradient(160deg,rgba(242,239,230,.05),rgba(242,239,230,.015));
+      backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+      padding:38px 32px;position:relative;will-change:transform;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
+      transition:background .35s,box-shadow .4s,transform .4s var(--ease);
+    }
+    .principle:hover{background:linear-gradient(160deg,rgba(242,239,230,.08),rgba(242,239,230,.02));transform:scale(1.03);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 0 0 1px rgba(246,168,31,.3),0 30px 60px -32px rgba(0,0,0,.5),0 20px 46px -22px rgba(246,168,31,.28)}
+    .principle__num{font-family:var(--mono);font-size:11px;color:var(--orange);letter-spacing:.18em}
+    .principle h3{font-size:22px;font-weight:800;letter-spacing:-.02em;margin:16px 0 10px}
+    .principle p{color:var(--muted);font-size:14.5px}
+    @media (max-width:860px){.principles{grid-template-columns:1fr}}
+
+    /* ============ SERVICES ============ */
+    .services__grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;margin-top:60px}
+    .service{
+      border:1px solid var(--line);border-radius:calc(var(--r) + 4px);
+      background:var(--surface);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+      padding:34px 30px;display:flex;flex-direction:column;position:relative;will-change:transform;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
+      transition:border-color .35s,transform .4s var(--ease),background .35s,box-shadow .4s;
+    }
+    .service:hover{border-color:rgba(246,168,31,.4);transform:translateY(-6px) scale(1.03);background:rgba(242,239,230,.045);box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 0 0 1px rgba(246,168,31,.3),0 30px 60px -28px rgba(0,0,0,.55),0 22px 50px -22px rgba(246,168,31,.3)}
+    .service--hot{border-color:rgba(246,168,31,.45);background:linear-gradient(180deg,rgba(246,168,31,.07),rgba(242,239,230,.02))}
+    .service__top{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:11px;letter-spacing:.14em}
+    .service__top b{color:var(--orange);font-weight:500}
+    .service__top time{color:var(--muted)}
+    .service__badge{
+      align-self:flex-start;font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+      background:var(--red);color:#fff;border-radius:6px;padding:4px 10px;margin-top:18px;
+    }
+    .service h3{font-size:23px;font-weight:800;letter-spacing:-.02em;margin:18px 0 10px}
+    .service>p{color:var(--muted);font-size:14.5px;margin-bottom:22px}
+    .service ul{display:grid;gap:11px;margin-bottom:30px}
+    .service li{display:flex;gap:11px;font-size:14px;color:#c4d2cf}
+    .service li::before{content:"";flex:none;width:14px;height:14px;margin-top:4px;border-radius:50%;
+      background:radial-gradient(circle at center,var(--amber) 0 38%,transparent 42%);border:1px solid rgba(246,168,31,.5)}
+    .service__foot{margin-top:auto;display:flex;align-items:flex-end;justify-content:space-between;gap:14px}
+    .service__price{line-height:1.1}
+    .service__price small{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+    .service__price b{font-size:30px;font-weight:800;letter-spacing:-.02em}
+    .service__foot .btn{padding:12px 20px;font-size:13.5px}
+    @media (max-width:760px){.services__grid{grid-template-columns:1fr}}
+
+    /* ============ PROCESS ============ */
+    .process{background:var(--bg-2);border-block:1px solid var(--line)}
+    .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:60px;counter-reset:step}
+    .step{border-top:1px solid var(--line-strong);padding-top:26px;position:relative}
+    .step__num{font-family:var(--mono);font-size:12px;color:var(--amber);letter-spacing:.2em}
+    .step h3{font-size:19px;font-weight:800;letter-spacing:-.02em;margin:14px 0 10px}
+    .step p{color:var(--muted);font-size:14px}
+    .step::before{
+      content:"";position:absolute;top:-5px;left:0;width:9px;height:9px;border-radius:50%;
+      background:var(--amber);box-shadow:0 0 0 5px rgba(246,168,31,.14);
+    }
+    @media (max-width:960px){.steps{grid-template-columns:1fr 1fr}}
+    @media (max-width:560px){.steps{grid-template-columns:1fr}}
+
+    /* ============ NUMBERS ============ */
+    .numbers{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:calc(var(--r) + 4px);overflow:hidden;margin-top:60px}
+    .num{
+      background:linear-gradient(160deg,rgba(242,239,230,.035),rgba(242,239,230,.01));
+      backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+      padding:38px 30px;position:relative;will-change:transform;
+      transition:background .35s,transform .4s var(--ease),box-shadow .4s;
+    }
+    .num:hover{background:linear-gradient(160deg,rgba(242,239,230,.06),rgba(242,239,230,.015));transform:scale(1.03);box-shadow:0 0 0 1px rgba(246,168,31,.28),0 20px 46px -24px rgba(246,168,31,.28)}
+    .num b{font-size:clamp(36px,4.6vw,54px);font-weight:800;letter-spacing:-.03em;line-height:1;display:flex;align-items:baseline;gap:2px}
+    .num b .sfx{color:var(--amber);font-size:.6em}
+    .num span{display:block;margin-top:12px;font-weight:700;font-size:15px}
+    .num p{color:var(--muted);font-size:13px;margin-top:6px}
+    @media (max-width:960px){.numbers{grid-template-columns:1fr 1fr}}
+    @media (max-width:560px){.numbers{grid-template-columns:1fr}}
+
+    /* ============ FOUNDER ============ */
+    .founder{background:var(--bg-2);border-block:1px solid var(--line);overflow:hidden}
+    .founder .wrap{display:grid;grid-template-columns:1.15fr .85fr;gap:60px;align-items:center}
+    .founder__quote{
+      font-family:var(--serif);font-style:italic;font-weight:500;
+      font-size:clamp(24px,3.2vw,38px);line-height:1.25;letter-spacing:-.01em;margin-top:34px;max-width:24ch;
+    }
+    .founder__quote .accent{color:var(--amber)}
+    .founder__text{color:var(--muted);margin-top:26px;max-width:52ch}
+    .founder__sign{margin-top:30px;display:flex;align-items:center;gap:16px}
+    .founder__sign b{display:block;font-size:16px}
+    .founder__sign span{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--muted)}
+    .founder__sign::before{content:"";width:38px;height:1px;background:var(--amber)}
+    .founder__photo{position:relative;justify-self:center}
+    .founder__photo::before{
+      content:"";position:absolute;inset:auto -8% 0;height:82%;
+      background:radial-gradient(ellipse at 50% 100%,rgba(246,168,31,.22),transparent 68%);
+      border-radius:32px;
+    }
+    .founder__photo::after{
+      content:"";position:absolute;left:50%;top:6%;transform:translateX(-50%);
+      width:min(340px,86%);aspect-ratio:1;border-radius:50%;
+      border:1px solid rgba(246,168,31,.5);
+      box-shadow:0 0 60px rgba(246,168,31,.16) inset,0 0 40px rgba(246,168,31,.1);
+    }
+    .founder__photo img{
+      position:relative;z-index:1;width:min(380px,78vw);height:auto;aspect-ratio:720/907;object-fit:cover;
+      filter:saturate(.92) contrast(1.02);
+      -webkit-mask-image:linear-gradient(#000 82%,transparent);mask-image:linear-gradient(#000 82%,transparent);
+    }
+    @media (max-width:860px){.founder .wrap{grid-template-columns:1fr;gap:30px}.founder__photo img{width:min(300px,58vw)}}
+    @media (max-width:420px){.founder__photo img{width:min(240px,54vw)}}
+
+    /* ============ TESTIMONIALS ============ */
+    #testimonials{isolation:isolate}
+    .testi__cursor-glow{
+      position:absolute;top:0;left:0;width:460px;height:460px;border-radius:50%;
+      background:radial-gradient(circle,rgba(246,168,31,.16),transparent 70%);
+      filter:blur(20px);pointer-events:none;z-index:-1;
+      transform:translate(-50%,-50%);opacity:0;transition:opacity .5s var(--ease);will-change:transform;
+    }
+    .testi__cursor-glow.is-active{opacity:1}
+    .testi__carousel{position:relative;margin-top:60px;z-index:1}
+    .testi__viewport{
+      overflow-x:auto;overflow-y:hidden;scroll-snap-type:x proximity;
+      scrollbar-width:none;-ms-overflow-style:none;cursor:grab;user-select:none;
+      -webkit-overflow-scrolling:touch;border-radius:calc(var(--r) + 4px);
+    }
+    .testi__viewport::-webkit-scrollbar{display:none}
+    .testi__viewport.is-dragging{cursor:grabbing}
+    .testi__track{display:flex;gap:20px;width:max-content;padding:4px 2px}
+    .quote{
+      border:1px solid var(--line);border-radius:calc(var(--r) + 4px);background:var(--surface);
+      backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+      padding:40px 36px;display:flex;flex-direction:column;gap:28px;position:relative;will-change:transform;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
+      transition:border-color .35s,transform .4s var(--ease),box-shadow .4s;
+      width:min(560px,86vw);flex:0 0 auto;scroll-snap-align:start;
+    }
+    .quote:hover{border-color:rgba(246,168,31,.4);transform:translateY(-4px) scale(1.03);box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 0 0 1px rgba(246,168,31,.28),0 26px 54px -26px rgba(0,0,0,.5),0 20px 46px -24px rgba(246,168,31,.26)}
+    .quote blockquote{
+      font-family:var(--serif);font-style:italic;font-weight:500;
+      font-size:clamp(17px,1.8vw,21px);line-height:1.45;letter-spacing:-.005em;color:#e5e1d5;
+    }
+    .quote blockquote .accent{color:var(--amber)}
+    .quote figcaption{display:flex;align-items:center;gap:14px;margin-top:auto}
+    .quote__ava{
+      flex:none;width:44px;height:44px;border-radius:50%;
+      display:grid;place-items:center;font-weight:800;font-size:14px;
+      background:linear-gradient(135deg,var(--orange),var(--red));color:#fff;
+    }
+    .quote figcaption b{display:block;font-size:14.5px}
+    .quote figcaption span{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.06em}
+    .testi__arrow{
+      position:absolute;top:50%;margin-top:-24px;z-index:2;width:48px;height:48px;border-radius:50%;
+      display:grid;place-items:center;color:var(--text);
+      background:rgba(7,21,24,.6);border:1px solid var(--line-strong);
+      backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+      box-shadow:0 14px 34px -16px rgba(0,0,0,.6);
+      transition:transform .4s var(--ease),box-shadow .4s,border-color .3s,color .3s;
+      will-change:transform;
+    }
+    .testi__arrow svg{width:18px;height:18px}
+    .testi__arrow--prev{left:-24px}
+    .testi__arrow--next{right:-24px}
+    .testi__arrow:hover{border-color:rgba(246,168,31,.5);color:var(--amber);transform:scale(1.08);box-shadow:0 0 0 1px rgba(246,168,31,.35),0 18px 40px -16px rgba(246,168,31,.4)}
+    .testi__arrow:active{transform:scale(.92)}
+    @media (max-width:760px){
+      .testi__arrow{width:40px;height:40px;margin-top:-20px}
+      .testi__arrow--prev{left:-20px}
+      .testi__arrow--next{right:-20px}
+      .testi__arrow svg{width:15px;height:15px}
+      .quote{width:min(420px,84vw);padding:30px 26px}
+    }
+
+    /* ============ CARD SPOTLIGHT (shared cursor-light highlight) ============ */
+    .principle,.service,.quote,.num{overflow:hidden}
+    .principle::after,.service::after,.quote::after,.num::after{
+      content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;
+      background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(246,168,31,.16),transparent 55%);
+      opacity:0;transition:opacity .4s var(--ease);mix-blend-mode:overlay;
+    }
+    .principle:hover::after,.service:hover::after,.quote:hover::after,.num:hover::after{opacity:1}
+
+    /* ============ FAQ ============ */
+    .faq__list{margin-top:50px;border-top:1px solid var(--line)}
+    .faq__item{border-bottom:1px solid var(--line)}
+    .faq__q{
+      width:100%;background:none;border:0;color:var(--text);text-align:left;
+      display:flex;justify-content:space-between;align-items:center;gap:22px;
+      padding:26px 4px;font-size:clamp(16px,1.8vw,20px);font-weight:700;letter-spacing:-.015em;
+      transition:color .25s;
+    }
+    .faq__q:hover{color:var(--amber)}
+    .faq__icon{
+      flex:none;width:34px;height:34px;border:1px solid var(--line-strong);border-radius:50%;
+      display:grid;place-items:center;position:relative;transition:transform .4s var(--ease),border-color .3s;
+    }
+    .faq__icon::before,.faq__icon::after{content:"";position:absolute;background:currentColor}
+    .faq__icon::before{width:12px;height:1.5px}
+    .faq__icon::after{width:1.5px;height:12px;transition:opacity .3s}
+    .faq__item.is-open .faq__icon{transform:rotate(45deg);border-color:var(--amber);color:var(--amber)}
+    .faq__a{max-height:0;overflow:hidden;transition:max-height .5s var(--ease)}
+    .faq__a p{color:var(--muted);padding:0 4px 28px;max-width:70ch;font-size:15px}
+
+    /* ============ CONTACT ============ */
+    .contact{background:var(--bg-2);border-top:1px solid var(--line)}
+    .contact .wrap{display:grid;grid-template-columns:1fr 1.1fr;gap:70px;align-items:start}
+    .contact__ways{margin-top:40px;display:grid;gap:2px;border:1px solid var(--line);border-radius:calc(var(--r) + 4px);overflow:hidden}
+    .way{display:flex;justify-content:space-between;align-items:center;gap:18px;background:var(--bg);padding:20px 24px;transition:background .3s}
+    a.way:hover{background:var(--bg-3)}
+    .way span{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+    .way b{font-weight:700;font-size:15px;text-align:right;word-break:break-all}
+    a.way:hover b{color:var(--amber)}
+    .form{
+      border:1px solid var(--line);border-radius:calc(var(--r) + 8px);
+      background:var(--bg);padding:clamp(26px,3.4vw,44px);display:grid;gap:20px;
+    }
+    .field label{display:flex;gap:6px;font-size:13px;font-weight:700;margin-bottom:9px;letter-spacing:.01em}
+    .field label small{color:var(--muted);font-weight:500}
+    .field input,.field select,.field textarea{
+      width:100%;background:var(--bg-2);border:1px solid var(--line);border-radius:11px;
+      color:var(--text);font-family:inherit;font-size:15px;padding:14px 16px;
+      transition:border-color .25s,background .25s;
+    }
+    .field textarea{min-height:110px;resize:vertical}
+    .field select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2393a6a4' stroke-width='1.6' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center}
+    .field input::placeholder,.field textarea::placeholder{color:rgba(147,166,164,.55)}
+    .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--amber);background:var(--bg-3)}
+    .field__error{display:none;color:var(--orange);font-size:12.5px;margin-top:7px}
+    .field.is-invalid input,.field.is-invalid select,.field.is-invalid textarea{border-color:var(--red)}
+    .field.is-invalid .field__error{display:block}
+    .form__note{font-size:12px;color:var(--muted);text-align:center}
+    .form__ok{
+      display:none;text-align:center;font-weight:700;color:var(--amber);
+      border:1px solid rgba(246,168,31,.4);background:rgba(246,168,31,.08);
+      border-radius:11px;padding:16px;
+    }
+    .form.is-sent .form__ok{display:block}
+
+    /* ============ FOOTER ============ */
+    .footer{background:var(--bg-3);border-radius:36px 36px 0 0;margin-top:60px;padding:70px 0 34px;border-top:1px solid var(--line)}
+    .footer__grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:44px}
+    .footer__about{color:var(--muted);font-size:14px;max-width:34ch;margin-top:16px}
+    .footer h4{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:18px;font-weight:500}
+    .footer li{margin-bottom:11px}
+    .footer li a{font-size:14px;color:#c4d2cf;transition:color .25s}
+    .footer li a:hover{color:var(--amber)}
+    .footer__bottom{
+      display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;
+      border-top:1px solid var(--line);margin-top:56px;padding-top:26px;
+      font-size:12.5px;color:var(--muted);
+    }
+    .status{display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:11px;letter-spacing:.12em}
+    .status i{width:8px;height:8px;border-radius:50%;background:#3ddc84;animation:pulse 2s infinite}
+    @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(61,220,132,.5)}55%{box-shadow:0 0 0 7px rgba(61,220,132,0)}}
+    @media (max-width:860px){.footer__grid{grid-template-columns:1fr 1fr}}
+    @media (max-width:860px){.contact .wrap{grid-template-columns:1fr;gap:44px}}
+
+    /* ============ MOBILE PERF ============ */
+    @media (max-width:700px){
+      .hero__glow span{filter:blur(46px)}
+      .hero__glow span:nth-child(3){display:none}
+      .principle,.service,.quote,.num{backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+    }
+
+    /* ============ REDUCED MOTION ============ */
+    @media (prefers-reduced-motion:reduce){
+      html{scroll-behavior:auto}
+      .reveal{opacity:1;transform:none;transition:none}
+      .marquee__track{animation:none}
+      .hero__scroll::after,.status i{animation:none}
+      .hero__glow span,.hero__ring,.hero__dot{animation:none}
+      .cursor{display:none!important}
+      *{transition-duration:.01ms!important}
+    }
+  </style>
+</head>
+<body>
+
+  <div class="noise" aria-hidden="true"></div>
+  <div class="cursor" aria-hidden="true" id="cursor"></div>
+
+  <!-- PRELOADER -->
+  <div class="preloader" id="preloader" aria-hidden="true">
+    <div class="preloader__mark">info<em>background</em></div>
+    <div class="preloader__bar"><i id="plBar"></i></div>
+    <div class="preloader__pct" id="plPct">0%</div>
+  </div>
+
+  <!-- HEADER -->
+  <header class="header" id="header">
+    <a class="logo" href="#hero" aria-label="Infobackground">info<em>background</em></a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="#approach" data-i18n="nav.approach">Подход</a>
+      <a href="#services" data-i18n="nav.services">Услуги</a>
+      <a href="#process" data-i18n="nav.process">Процесс</a>
+      <a href="#whyus" data-i18n="nav.whyus">Почему мы</a>
+      <a href="#testimonials" data-i18n="nav.testimonials">Отзывы</a>
+      <a href="#contact" data-i18n="nav.contacts">Контакты</a>
+    </nav>
+    <div class="header__right">
+      <div class="lang" role="group" aria-label="Language">
+        <button type="button" data-lang="ru" class="is-active">RU</button>
+        <button type="button" data-lang="en">EN</button>
+        <button type="button" data-lang="ua">UA</button>
+      </div>
+      <a class="btn btn--primary" href="#contact"><span data-i18n="header.cta">Обсудить проект</span></a>
+      <button class="burger" id="burger" aria-label="Menu" aria-expanded="false"><i></i></button>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero" id="hero">
+      <div class="hero__media" aria-hidden="true">
+        <video id="heroVideo" autoplay muted loop playsinline preload="auto" poster="assets/hero-poster.jpg">
+          <source src="assets/hero-video.mp4" type="video/mp4"/>
+        </video>
+      </div>
+      <div class="hero__shade" aria-hidden="true"></div>
+      <div class="hero__glow" aria-hidden="true"><span></span><span></span><span></span></div>
+      <div class="hero__deco" aria-hidden="true">
+        <span class="hero__ring hero__ring--a"></span>
+        <span class="hero__ring hero__ring--b"></span>
+        <span class="hero__dot"></span>
+      </div>
+
+      <div class="wrap">
+        <p class="eyebrow hero__eyebrow reveal" data-i18n="hero.eyebrow">Лендинги · Сайты · Для бизнеса</p>
+        <h1 class="hero__title reveal" data-d="1" data-i18n="hero.title">Делаем сайты, <span class="drama">которые продают.</span></h1>
+        <p class="hero__sub reveal" data-d="2" data-i18n="hero.sub">Лендинги и сайты для бизнеса и частных предпринимателей: быстро, качественно и без космических бюджетов. От первого созвона до запуска — 7–14 дней.</p>
+        <div class="hero__cta reveal" data-d="3">
+          <a class="btn btn--primary" href="#contact"><span data-i18n="hero.cta1">Обсудить проект</span>
+            <svg viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M3 9h11M10 4.5 14.5 9 10 13.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a class="btn btn--ghost" href="#services"><span data-i18n="hero.cta2">Смотреть услуги</span></a>
+        </div>
+        <div class="hero__stack reveal" data-d="4">
+          <span class="hero__stack-label" data-i18n="hero.stack">Стек</span>
+          <div class="marquee"><div class="marquee__track" id="marqueeTrack">
+            <span class="chip"><i></i>AI</span>
+            <span class="chip"><i></i>Claude</span>
+            <span class="chip"><i></i>Figma</span>
+            <span class="chip"><i></i>Tilda</span>
+            <span class="chip"><i></i>Webflow</span>
+            <span class="chip"><i></i>n8n</span>
+            <span class="chip"><i></i>ManyChat</span>
+            <span class="chip"><i></i>OpenAI</span>
+            <span class="chip"><i></i>Telegram</span>
+            <span class="chip"><i></i>Make</span>
+          </div></div>
+        </div>
+      </div>
+      <div class="hero__scroll" aria-hidden="true">scroll</div>
+    </section>
+
+    <!-- APPROACH -->
+    <section class="manifesto" id="approach">
+      <div class="wrap">
+        <p class="eyebrow reveal" data-i18n="approach.eyebrow">Подход</p>
+        <p class="manifesto__small reveal" data-d="1" data-i18n="approach.small">Обычно говорят: «быстро, качественно, недорого — выбери два».</p>
+        <h2 class="manifesto__big reveal" data-d="2" data-i18n="approach.big">Мы собрали процесс так, чтобы <span class="drama">не выбирать.</span></h2>
+        <p class="lead reveal" data-d="3" data-i18n="approach.lead">Мы не продаём «цифровую трансформацию» и презентации на 60 слайдов. Мы проектируем сайт под одну цель: превращать трафик в заявки. Структура, текст, дизайн и запуск — одной командой, без месяцев согласований.</p>
+
+        <div class="principles">
+          <article class="principle reveal" data-reveal="left">
+            <span class="principle__num">// 01</span>
+            <h3 data-i18n="p1.t">Быстро</h3>
+            <p data-i18n="p1.d">Сайт-визитка — 5–7 дней, лендинг — 7–14. На каждый этап — дата и ответственный. Если сроки сдвигаются — предупреждаем первыми, без напоминаний с твоей стороны.</p>
+          </article>
+          <article class="principle reveal" data-d="1">
+            <span class="principle__num">// 02</span>
+            <h3 data-i18n="p2.t">Качественно</h3>
+            <p data-i18n="p2.d">Уникальный дизайн, не шаблон «как у всех». Структура и прототип согласовываются до дизайна, поэтому переделок в конце не бывает.</p>
+          </article>
+          <article class="principle reveal" data-d="2" data-reveal="right">
+            <span class="principle__num">// 03</span>
+            <h3 data-i18n="p3.t">Недорого</h3>
+            <p data-i18n="p3.d">Прозрачная смета до старта: фиксированная цена и никаких «уточним при встрече». 30 дней после запуска правим всё бесплатно.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section id="services">
+      <div class="wrap">
+        <p class="eyebrow reveal" data-i18n="services.eyebrow">Услуги</p>
+        <h2 class="h2 reveal" data-d="1" data-i18n="services.title">Форматы, которые закрывают 90% задач</h2>
+        <p class="lead reveal" data-d="2" data-i18n="services.lead">Каждый — с фиксированным сроком, понятной ценой и поддержкой после запуска. Никаких «уточним при встрече».</p>
+
+        <div class="services__grid">
+          <article class="service reveal">
+            <div class="service__top"><b>// 01</b><time data-i18n="s1.days">5–7 дней</time></div>
+            <h3 data-i18n="s1.t">Сайт-визитка / промо</h3>
+            <p data-i18n="s1.d">Аккуратный одностраничник о компании, специалисте или продукте. Достаточно, чтобы тебя находили и писали.</p>
+            <ul>
+              <li data-i18n="s1.li1">1–3 экрана: о тебе, услуги, контакты</li>
+              <li data-i18n="s1.li2">Дизайн в фирменных цветах</li>
+              <li data-i18n="s1.li3">Форма заявки и мессенджеры</li>
+              <li data-i18n="s1.li4">Домен, хостинг, запуск под ключ</li>
+            </ul>
+            <div class="service__foot">
+              <div class="service__price"><small data-i18n="s.from">от</small><b>€400</b></div>
+              <a class="btn btn--ghost" href="#contact"><span data-i18n="s.cta">Обсудить</span></a>
+            </div>
+          </article>
+
+          <article class="service service--hot reveal" data-d="1" data-reveal="scale">
+            <div class="service__top"><b>// 02</b><time data-i18n="s2.days">7–14 дней</time></div>
+            <span class="service__badge" data-i18n="s2.badge">Хит</span>
+            <h3 data-i18n="s2.t">Лендинг под ключ</h3>
+            <p data-i18n="s2.d">Современный лендинг, готовый к рекламному трафику: продающая структура, уникальный дизайн и форма заявки, интегрированная с CRM.</p>
+            <ul>
+              <li data-i18n="s2.li1">Структура и прототип, согласованные до дизайна</li>
+              <li data-i18n="s2.li2">Уникальный дизайн (не шаблон Tilda «как у всех»)</li>
+              <li data-i18n="s2.li3">Адаптив под мобайл / планшет</li>
+              <li data-i18n="s2.li4">Подключение метрик, форм и автоматизаций</li>
+            </ul>
+            <div class="service__foot">
+              <div class="service__price"><small data-i18n="s.from">от</small><b>€800</b></div>
+              <a class="btn btn--primary" href="#contact"><span data-i18n="s.cta">Обсудить</span></a>
+            </div>
+          </article>
+
+          <article class="service reveal" data-d="2">
+            <div class="service__top"><b>// 03</b><time data-i18n="s3.days">14–21 день</time></div>
+            <h3 data-i18n="s3.t">Многостраничный сайт</h3>
+            <p data-i18n="s3.d">Полноценный сайт для компании: услуги, кейсы, блог. Дизайн-система, быстрая загрузка и база для SEO.</p>
+            <ul>
+              <li data-i18n="s3.li1">До 10 страниц: услуги, кейсы, о компании</li>
+              <li data-i18n="s3.li2">Единая дизайн-система под бренд</li>
+              <li data-i18n="s3.li3">SEO-база: скорость, разметка, метатеги</li>
+              <li data-i18n="s3.li4">CMS — правишь тексты сам, без разработчика</li>
+            </ul>
+            <div class="service__foot">
+              <div class="service__price"><small data-i18n="s.from">от</small><b>€1500</b></div>
+              <a class="btn btn--ghost" href="#contact"><span data-i18n="s.cta">Обсудить</span></a>
+            </div>
+          </article>
+
+          <article class="service reveal" data-d="3" data-reveal="scale">
+            <div class="service__top"><b>// 04</b><time data-i18n="s4.days">5–10 дней</time></div>
+            <h3 data-i18n="s4.t">Редизайн существующего сайта</h3>
+            <p data-i18n="s4.d">Обновляем визуал и структуру сайта, который перестал приносить заявки. Сохраняем то, что уже работает, убираем то, что тормозит конверсию.</p>
+            <ul>
+              <li data-i18n="s4.li1">Аудит текущего сайта и точек потери заявок</li>
+              <li data-i18n="s4.li2">Новый дизайн поверх существующей структуры</li>
+              <li data-i18n="s4.li3">Ускорение загрузки и адаптив под мобайл</li>
+              <li data-i18n="s4.li4">Перенос контента без потери SEO</li>
+            </ul>
+            <div class="service__foot">
+              <div class="service__price"><small data-i18n="s.from">от</small><b>€600</b></div>
+              <a class="btn btn--ghost" href="#contact"><span data-i18n="s.cta">Обсудить</span></a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROCESS -->
+    <section class="process" id="process">
+      <div class="wrap">
+        <p class="eyebrow reveal" data-i18n="process.eyebrow">Процесс</p>
+        <h2 class="h2 reveal" data-d="1" data-i18n="process.title">Как рождается сайт</h2>
+        <p class="lead reveal" data-d="2" data-i18n="process.lead">Четыре шага от заявки до запуска. На каждом ты видишь результат — никаких «мы работаем, ждите».</p>
+
+        <div class="steps">
+          <article class="step reveal">
+            <span class="step__num">01</span>
+            <h3 data-i18n="st1.t">Заявка и бриф</h3>
+            <p data-i18n="st1.d">Созвон на 20 минут или переписка в Telegram. Фиксируем цель сайта, сроки и смету — до старта работ.</p>
+          </article>
+          <article class="step reveal" data-d="1">
+            <span class="step__num">02</span>
+            <h3 data-i18n="st2.t">Прототип и текст</h3>
+            <p data-i18n="st2.d">Продающая структура и текст каждого экрана — до дизайна. Согласуем, чтобы потом не переделывать.</p>
+          </article>
+          <article class="step reveal" data-d="2">
+            <span class="step__num">03</span>
+            <h3 data-i18n="st3.t">Дизайн и сборка</h3>
+            <p data-i18n="st3.d">Уникальный дизайн, анимации, адаптив под мобайл. Показываем прогресс каждые 2–3 дня.</p>
+          </article>
+          <article class="step reveal" data-d="3">
+            <span class="step__num">04</span>
+            <h3 data-i18n="st4.t">Запуск и поддержка</h3>
+            <p data-i18n="st4.d">Домен, метрики, формы, интеграции с CRM. Дальше — 30 дней бесплатных правок после запуска.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHY US / NUMBERS -->
+    <section id="whyus">
+      <div class="wrap">
+        <p class="eyebrow reveal" data-i18n="why.eyebrow">Почему мы</p>
+        <h2 class="h2 reveal" data-d="1" data-i18n="why.title">Цифры, на которые можно опереться</h2>
+        <p class="lead reveal" data-d="2" data-i18n="why.lead">Никакого «работаем с 2008 года». Реальные результаты за последние годы — то, что действительно показывает уровень.</p>
+
+        <div class="numbers reveal" data-d="2">
+          <div class="num">
+            <b><span data-count="27">0</span><span class="sfx">+</span></b>
+            <span data-i18n="n1.t">Сайтов и лендингов</span>
+            <p data-i18n="n1.d">запущено для бизнесов и частных специалистов</p>
+          </div>
+          <div class="num">
+            <b><span data-count="7">0</span></b>
+            <span data-i18n="n2.t">Дней — минимальный срок</span>
+            <p data-i18n="n2.d">от брифа до работающего сайта-визитки</p>
+          </div>
+          <div class="num">
+            <b><span data-count="6.2">0</span><span class="sfx">%</span></b>
+            <span data-i18n="n3.t">Конверсия лучшего лендинга</span>
+            <p data-i18n="n3.d">при среднем по рынку 1.5–3% на платном трафике</p>
+          </div>
+          <div class="num">
+            <b><span data-count="30">0</span></b>
+            <span data-i18n="n4.t">Дней поддержки бесплатно</span>
+            <p data-i18n="n4.d">после запуска правим всё, что работает не так</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOUNDER -->
+    <section class="founder" id="founder">
+      <div class="wrap">
+        <div>
+          <p class="eyebrow reveal" data-i18n="f.eyebrow">Основатель</p>
+          <h2 class="h2 reveal" data-d="1" data-i18n="f.title">Александр Маточкин</h2>
+          <p class="founder__quote reveal" data-d="2" data-i18n="f.quote">«Каждый проект — будто это сайт <span class="accent">нашего лучшего друга».</span></p>
+          <p class="founder__text reveal" data-d="3" data-i18n="f.text">4 года делаю сайты и автоматизации для бизнеса. Каждый проект веду лично — от первого созвона до запуска. Большая часть клиентов приходит по рекомендациям, поэтому халтурить просто невыгодно.</p>
+          <p class="founder__sign reveal" data-d="4"><span><b data-i18n="f.name">Александр Маточкин</b><span data-i18n="f.role">основатель · 4 года в AI и вебе</span></span></p>
+        </div>
+        <div class="founder__photo reveal" data-d="2" data-reveal="right">
+          <img src="assets/founder.webp" alt="Александр Маточкин — основатель Infobackground" width="720" height="907" loading="lazy" data-i18n-attr="alt:f.alt"/>
+        </div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section id="testimonials">
+      <div class="testi__cursor-glow" aria-hidden="true"></div>
+      <div class="wrap">
+        <p class="eyebrow reveal" data-i18n="t.eyebrow">Отзывы</p>
+        <h2 class="h2 reveal" data-d="1" data-i18n="t.title">Что говорят те, для кого мы уже сделали</h2>
+        <p class="lead reveal" data-d="2" data-i18n="t.lead">Никаких «отзывы под NDA, поверьте на слово». Живые слова реальных клиентов после запуска.</p>
+
+        <div class="testi__carousel reveal" data-d="3">
+          <button class="testi__arrow testi__arrow--prev" type="button" aria-label="Предыдущий отзыв" data-i18n-attr="aria-label:t.prev">
+            <svg viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M11 3.5 5.5 9 11 14.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="testi__viewport" id="testiViewport">
+            <div class="testi__track" id="testiTrack">
+              <figure class="quote">
+                <blockquote data-i18n="t0.q">«Хочу выразить огромную благодарность за разработку и дизайн сайта! Задача была непростая — передать через экран атмосферу заботы, эстетики и высокого уровня сервиса. Результат <span class="accent">превзошёл все ожидания</span>: сайт получился стильным, современным и очень удобным для пользователей. Дизайнерские решения, типографика, адаптивность — всё выполнено на высшем уровне. Уже слышу от клиентов много тёплых слов про сайт.»</blockquote>
+                <figcaption>
+                  <span class="quote__ava">СВ</span>
+                  <span><b data-i18n="t0.name">Светлана</b><span data-i18n="t0.role">основательница revive_by_svetlana</span></span>
+                </figcaption>
+              </figure>
+              <figure class="quote">
+                <blockquote data-i18n="t1.q">«Заказали лендинг под новую линейку. Сделали быстрее, чем обещали, а главное — он реально работает. Конверсия в заявку <span class="accent">6.2%</span> — у предыдущего сайта была 1.8%. Платный трафик стал окупаться, наконец.»</blockquote>
+                <figcaption>
+                  <span class="quote__ava">МД</span>
+                  <span><b data-i18n="t1.name">Михаил Дроздов</b><span data-i18n="t1.role">CEO бренда aksess.shop</span></span>
+                </figcaption>
+              </figure>
+              <figure class="quote">
+                <blockquote data-i18n="t2.q">«Нужен был сайт для онлайн-школы. Ребята предложили структуру, которой у нас не было даже в голове, и запустили за <span class="accent">12 дней</span>. Через месяц заявка стала стоить на треть дешевле.»</blockquote>
+                <figcaption>
+                  <span class="quote__ava">ЕК</span>
+                  <span><b data-i18n="t2.name">Елена Карпова</b><span data-i18n="t2.role">основатель онлайн-школы «Грани»</span></span>
+                </figcaption>
+              </figure>
+            </div>
+          </div>
+          <button class="testi__arrow testi__arrow--next" type="button" aria-label="Следующий отзыв" data-i18n-attr="aria-label:t.next">
+            <svg viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M7 3.5 12.5 9 7 14.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq">
+      <div class="wrap">
+        <p class="eyebrow reveal" data-i18n="faq.eyebrow">FAQ</p>
+        <h2 class="h2 reveal" data-d="1" data-i18n="faq.title">Вопросы, которые задают до старта</h2>
+
+        <div class="faq__list reveal" data-d="2">
+          <div class="faq__item">
+            <button class="faq__q" type="button" aria-expanded="false"><span data-i18n="q1.q">Сколько стоит сайт?</span><span class="faq__icon" aria-hidden="true"></span></button>
+            <div class="faq__a"><p data-i18n="q1.a">Сайт-визитка — от €400, лендинг под ключ — от €800, многостраничный сайт — от €1500. Точная смета — после короткого брифа, фиксируется до старта и не меняется в процессе.</p></div>
+          </div>
+          <div class="faq__item">
+            <button class="faq__q" type="button" aria-expanded="false"><span data-i18n="q2.q">Какие сроки?</span><span class="faq__icon" aria-hidden="true"></span></button>
+            <div class="faq__a"><p data-i18n="q2.a">Визитка — 5–7 дней, лендинг — 7–14, многостраничный сайт — 14–21. Дата запуска фиксируется в начале. Если сроки сдвигаются — предупреждаем первыми.</p></div>
+          </div>
+          <div class="faq__item">
+            <button class="faq__q" type="button" aria-expanded="false"><span data-i18n="q3.q">На чём вы делаете сайты?</span><span class="faq__icon" aria-hidden="true"></span></button>
+            <div class="faq__a"><p data-i18n="q3.a">Код без конструкторов — когда важны скорость и уникальность, или Tilda / Webflow — когда нужно потом править самостоятельно. Что подойдёт тебе, советуем на первом созвоне.</p></div>
+          </div>
+          <div class="faq__item">
+            <button class="faq__q" type="button" aria-expanded="false"><span data-i18n="q4.q">Что нужно от меня?</span><span class="faq__icon" aria-hidden="true"></span></button>
+            <div class="faq__a"><p data-i18n="q4.a">20 минут на бриф, материалы о продукте (фото, цены, отзывы — что есть) и обратная связь в двух контрольных точках: после прототипа и после дизайна. Остальное — наша работа.</p></div>
+          </div>
+          <div class="faq__item">
+            <button class="faq__q" type="button" aria-expanded="false"><span data-i18n="q5.q">Что происходит после запуска?</span><span class="faq__icon" aria-hidden="true"></span></button>
+            <div class="faq__a"><p data-i18n="q5.a">30 дней бесплатно правим всё, что отвалилось или работает не так. Дальше — поддержка по фиксированному прайсу, без подписок. Домен и хостинг оформляются на тебя — сайт полностью твой.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="contact" id="contact">
+      <div class="wrap">
+        <div>
+          <p class="eyebrow reveal" data-i18n="c.eyebrow">Заявка</p>
+          <h2 class="h2 reveal" data-d="1" data-i18n="c.title">Расскажи о задаче — предложим решение за 24 часа</h2>
+          <p class="lead reveal" data-d="2" data-i18n="c.lead">Напиши, какой сайт нужен. На следующий день вернёмся с короткой структурой, сроком и стоимостью. Без созвонов на полтора часа.</p>
+
+          <div class="contact__ways reveal" data-d="3">
+            <a class="way" href="https://t.me/infobackground" target="_blank" rel="noopener"><span>Telegram</span><b>@infobackground</b></a>
+            <a class="way" href="https://instagram.com/infobackground" target="_blank" rel="noopener"><span>Instagram</span><b>@infobackground</b></a>
+            <a class="way" href="mailto:matochkinaleksandr3@gmail.com"><span>Email</span><b>matochkinaleksandr3@gmail.com</b></a>
+            <div class="way"><span data-i18n="c.reply">Отвечаем</span><b data-i18n="c.reply.v">в течение 24 часов, пн–пт</b></div>
+          </div>
+        </div>
+
+        <form class="form reveal" data-d="2" id="leadForm" novalidate>
+          <div class="field" data-field="name">
+            <label for="fName" data-i18n="form.name.label">Имя</label>
+            <input id="fName" name="name" type="text" autocomplete="name" data-i18n-attr="placeholder:form.name.ph" placeholder="Как к тебе обращаться"/>
+            <span class="field__error" data-i18n="form.name.err">Укажи имя</span>
+          </div>
+          <div class="field" data-field="contact">
+            <label for="fContact" data-i18n="form.contact.label">Telegram или телефон</label>
+            <input id="fContact" name="contact" type="text" data-i18n-attr="placeholder:form.contact.ph" placeholder="@username или +7…"/>
+            <span class="field__error" data-i18n="form.contact.err">Нужен контакт для связи</span>
+          </div>
+          <div class="field" data-field="service">
+            <label for="fService" data-i18n="form.service.label">Тип сайта</label>
+            <select id="fService" name="service">
+              <option value="" data-i18n="form.service.opt0">Выбери формат</option>
+              <option data-i18n="form.service.opt1">Лендинг под ключ</option>
+              <option data-i18n="form.service.opt2">Сайт-визитка / промо</option>
+              <option data-i18n="form.service.opt3">Многостраничный сайт</option>
+              <option data-i18n="form.service.opt4">Редизайн существующего сайта</option>
+              <option data-i18n="form.service.opt5">Другое / не уверен</option>
+            </select>
+            <span class="field__error" data-i18n="form.service.err">Выбери формат</span>
+          </div>
+          <div class="field" data-field="task">
+            <label for="fTask" data-i18n="form.task.label">Опиши задачу</label>
+            <textarea id="fTask" name="task" data-i18n-attr="placeholder:form.task.ph" placeholder="Например: нужен лендинг для студии маникюра — записаться можно в Telegram, хочу собирать заявки с рекламы в Instagram"></textarea>
+            <span class="field__error" data-i18n="form.task.err">Расскажи в двух словах, что нужно</span>
+          </div>
+          <div class="field" data-field="budget">
+            <label for="fBudget"><span data-i18n="form.budget.label">Бюджет</span> <small data-i18n="form.budget.opt">(необязательно)</small></label>
+            <input id="fBudget" name="budget" type="text" data-i18n-attr="placeholder:form.budget.ph" placeholder="Например: до €1000"/>
+          </div>
+          <button type="submit" class="btn btn--primary" style="justify-content:center">
+            <span data-i18n="form.submit">Отправить заявку</span>
+            <svg viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M3 9h11M10 4.5 14.5 9 10 13.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <p class="form__note" data-i18n="form.note">Отправляя форму, ты соглашаешься на обработку данных</p>
+          <p class="form__ok" role="status" data-i18n="form.success">✓ Заявка принята. Ответим в течение 24 часов в Telegram.</p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="wrap">
+      <div class="footer__grid">
+        <div>
+          <span class="logo">info<em>background</em></span>
+          <p class="footer__about" data-i18n="footer.about">Студия сайтов и лендингов. Помогаем предпринимателям и командам получать заявки из интернета — быстро, качественно и без космических бюджетов.</p>
+        </div>
+        <div>
+          <h4 data-i18n="footer.col.services">Услуги</h4>
+          <ul>
+            <li><a href="#services" data-i18n="footer.s1">Лендинги под ключ</a></li>
+            <li><a href="#services" data-i18n="footer.s2">Сайты-визитки</a></li>
+            <li><a href="#services" data-i18n="footer.s3">Многостраничные сайты</a></li>
+            <li><a href="#services" data-i18n="footer.s4">Редизайн</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 data-i18n="footer.col.contacts">Контакты</h4>
+          <ul>
+            <li><a href="https://t.me/infobackground" target="_blank" rel="noopener">Telegram</a></li>
+            <li><a href="https://instagram.com/infobackground" target="_blank" rel="noopener">Instagram</a></li>
+            <li><a href="mailto:matochkinaleksandr3@gmail.com">Email</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 data-i18n="footer.col.nav">Навигация</h4>
+          <ul>
+            <li><a href="#approach" data-i18n="nav.approach">Подход</a></li>
+            <li><a href="#whyus" data-i18n="nav.whyus">Почему мы</a></li>
+            <li><a href="#testimonials" data-i18n="nav.testimonials">Отзывы</a></li>
+            <li><a href="#contact" data-i18n="nav.contacts">Контакты</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <span data-i18n="footer.copyright">© 2026 Infobackground · Сайты и лендинги для твоего бизнеса</span>
+        <span class="status"><i></i><span data-i18n="footer.status">Все системы работают</span></span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ==========================================================
+    // I18N — RU / EN / UA
+    // ==========================================================
+    const i18n = {
+      ru: {
+        "meta.title":"Infobackground — Сайты и лендинги, которые продают",
+        "meta.desc":"Делаем лендинги и сайты для бизнеса и частных предпринимателей. Быстро — от 7 дней, качественно — уникальный дизайн, недорого — фиксированная смета до старта.",
+        "nav.approach":"Подход","nav.services":"Услуги","nav.process":"Процесс","nav.whyus":"Почему мы","nav.testimonials":"Отзывы","nav.contacts":"Контакты",
+        "header.cta":"Обсудить проект",
+        "hero.eyebrow":"Лендинги · Сайты · Для бизнеса",
+        "hero.title":"Делаем сайты, <span class=\"drama\">которые продают.</span>",
+        "hero.sub":"Лендинги и сайты для бизнеса и частных предпринимателей: быстро, качественно и без космических бюджетов. От первого созвона до запуска — 7–14 дней.",
+        "hero.cta1":"Обсудить проект","hero.cta2":"Смотреть услуги","hero.stack":"Стек",
+        "approach.eyebrow":"Подход",
+        "approach.small":"Обычно говорят: «быстро, качественно, недорого — выбери два».",
+        "approach.big":"Мы собрали процесс так, чтобы <span class=\"drama\">не выбирать.</span>",
+        "approach.lead":"Мы не продаём «цифровую трансформацию» и презентации на 60 слайдов. Мы проектируем сайт под одну цель: превращать трафик в заявки. Структура, текст, дизайн и запуск — одной командой, без месяцев согласований.",
+        "p1.t":"Быстро","p1.d":"Сайт-визитка — 5–7 дней, лендинг — 7–14. На каждый этап — дата и ответственный. Если сроки сдвигаются — предупреждаем первыми, без напоминаний с твоей стороны.",
+        "p2.t":"Качественно","p2.d":"Уникальный дизайн, не шаблон «как у всех». Структура и прототип согласовываются до дизайна, поэтому переделок в конце не бывает.",
+        "p3.t":"Недорого","p3.d":"Прозрачная смета до старта: фиксированная цена и никаких «уточним при встрече». 30 дней после запуска правим всё бесплатно.",
+        "services.eyebrow":"Услуги","services.title":"Форматы, которые закрывают 90% задач",
+        "services.lead":"Каждый — с фиксированным сроком, понятной ценой и поддержкой после запуска. Никаких «уточним при встрече».",
+        "s.from":"от","s.cta":"Обсудить",
+        "s1.days":"5–7 дней","s1.t":"Сайт-визитка / промо","s1.d":"Аккуратный одностраничник о компании, специалисте или продукте. Достаточно, чтобы тебя находили и писали.",
+        "s1.li1":"1–3 экрана: о тебе, услуги, контакты","s1.li2":"Дизайн в фирменных цветах","s1.li3":"Форма заявки и мессенджеры","s1.li4":"Домен, хостинг, запуск под ключ",
+        "s2.days":"7–14 дней","s2.badge":"Хит","s2.t":"Лендинг под ключ","s2.d":"Современный лендинг, готовый к рекламному трафику: продающая структура, уникальный дизайн и форма заявки, интегрированная с CRM.",
+        "s2.li1":"Структура и прототип, согласованные до дизайна","s2.li2":"Уникальный дизайн (не шаблон Tilda «как у всех»)","s2.li3":"Адаптив под мобайл / планшет","s2.li4":"Подключение метрик, форм и автоматизаций",
+        "s3.days":"14–21 день","s3.t":"Многостраничный сайт","s3.d":"Полноценный сайт для компании: услуги, кейсы, блог. Дизайн-система, быстрая загрузка и база для SEO.",
+        "s3.li1":"До 10 страниц: услуги, кейсы, о компании","s3.li2":"Единая дизайн-система под бренд","s3.li3":"SEO-база: скорость, разметка, метатеги","s3.li4":"CMS — правишь тексты сам, без разработчика",
+        "s4.days":"5–10 дней","s4.t":"Редизайн существующего сайта","s4.d":"Обновляем визуал и структуру сайта, который перестал приносить заявки. Сохраняем то, что уже работает, убираем то, что тормозит конверсию.",
+        "s4.li1":"Аудит текущего сайта и точек потери заявок","s4.li2":"Новый дизайн поверх существующей структуры","s4.li3":"Ускорение загрузки и адаптив под мобайл","s4.li4":"Перенос контента без потери SEO",
+        "process.eyebrow":"Процесс","process.title":"Как рождается сайт",
+        "process.lead":"Четыре шага от заявки до запуска. На каждом ты видишь результат — никаких «мы работаем, ждите».",
+        "st1.t":"Заявка и бриф","st1.d":"Созвон на 20 минут или переписка в Telegram. Фиксируем цель сайта, сроки и смету — до старта работ.",
+        "st2.t":"Прототип и текст","st2.d":"Продающая структура и текст каждого экрана — до дизайна. Согласуем, чтобы потом не переделывать.",
+        "st3.t":"Дизайн и сборка","st3.d":"Уникальный дизайн, анимации, адаптив под мобайл. Показываем прогресс каждые 2–3 дня.",
+        "st4.t":"Запуск и поддержка","st4.d":"Домен, метрики, формы, интеграции с CRM. Дальше — 30 дней бесплатных правок после запуска.",
+        "why.eyebrow":"Почему мы","why.title":"Цифры, на которые можно опереться",
+        "why.lead":"Никакого «работаем с 2008 года». Реальные результаты за последние годы — то, что действительно показывает уровень.",
+        "n1.t":"Сайтов и лендингов","n1.d":"запущено для бизнесов и частных специалистов",
+        "n2.t":"Дней — минимальный срок","n2.d":"от брифа до работающего сайта-визитки",
+        "n3.t":"Конверсия лучшего лендинга","n3.d":"при среднем по рынку 1.5–3% на платном трафике",
+        "n4.t":"Дней поддержки бесплатно","n4.d":"после запуска правим всё, что работает не так",
+        "f.eyebrow":"Основатель","f.title":"Александр Маточкин",
+        "f.quote":"«Каждый проект — будто это сайт <span class=\"accent\">нашего лучшего друга».</span>",
+        "f.text":"4 года делаю сайты и автоматизации для бизнеса. Каждый проект веду лично — от первого созвона до запуска. Большая часть клиентов приходит по рекомендациям, поэтому халтурить просто невыгодно.",
+        "f.name":"Александр Маточкин","f.role":"основатель · 4 года в AI и вебе","f.alt":"Александр Маточкин — основатель Infobackground",
+        "t.eyebrow":"Отзывы","t.title":"Что говорят те, для кого мы уже сделали",
+        "t.lead":"Никаких «отзывы под NDA, поверьте на слово». Живые слова реальных клиентов после запуска.",
+        "t.prev":"Предыдущий отзыв","t.next":"Следующий отзыв",
+        "t0.q":"«Хочу выразить огромную благодарность за разработку и дизайн сайта! Задача была непростая — передать через экран атмосферу заботы, эстетики и высокого уровня сервиса. Результат <span class=\"accent\">превзошёл все ожидания</span>: сайт получился стильным, современным и очень удобным для пользователей. Дизайнерские решения, типографика, адаптивность — всё выполнено на высшем уровне. Уже слышу от клиентов много тёплых слов про сайт.»",
+        "t0.name":"Светлана","t0.role":"основательница revive_by_svetlana",
+        "t1.q":"«Заказали лендинг под новую линейку. Сделали быстрее, чем обещали, а главное — он реально работает. Конверсия в заявку <span class=\"accent\">6.2%</span> — у предыдущего сайта была 1.8%. Платный трафик стал окупаться, наконец.»",
+        "t1.name":"Михаил Дроздов","t1.role":"CEO бренда aksess.shop",
+        "t2.q":"«Нужен был сайт для онлайн-школы. Ребята предложили структуру, которой у нас не было даже в голове, и запустили за <span class=\"accent\">12 дней</span>. Через месяц заявка стала стоить на треть дешевле.»",
+        "t2.name":"Елена Карпова","t2.role":"основатель онлайн-школы «Грани»",
+        "faq.eyebrow":"FAQ","faq.title":"Вопросы, которые задают до старта",
+        "q1.q":"Сколько стоит сайт?","q1.a":"Сайт-визитка — от €400, лендинг под ключ — от €800, многостраничный сайт — от €1500. Точная смета — после короткого брифа, фиксируется до старта и не меняется в процессе.",
+        "q2.q":"Какие сроки?","q2.a":"Визитка — 5–7 дней, лендинг — 7–14, многостраничный сайт — 14–21. Дата запуска фиксируется в начале. Если сроки сдвигаются — предупреждаем первыми.",
+        "q3.q":"На чём вы делаете сайты?","q3.a":"Код без конструкторов — когда важны скорость и уникальность, или Tilda / Webflow — когда нужно потом править самостоятельно. Что подойдёт тебе, советуем на первом созвоне.",
+        "q4.q":"Что нужно от меня?","q4.a":"20 минут на бриф, материалы о продукте (фото, цены, отзывы — что есть) и обратная связь в двух контрольных точках: после прототипа и после дизайна. Остальное — наша работа.",
+        "q5.q":"Что происходит после запуска?","q5.a":"30 дней бесплатно правим всё, что отвалилось или работает не так. Дальше — поддержка по фиксированному прайсу, без подписок. Домен и хостинг оформляются на тебя — сайт полностью твой.",
+        "c.eyebrow":"Заявка","c.title":"Расскажи о задаче — предложим решение за 24 часа",
+        "c.lead":"Напиши, какой сайт нужен. На следующий день вернёмся с короткой структурой, сроком и стоимостью. Без созвонов на полтора часа.",
+        "c.reply":"Отвечаем","c.reply.v":"в течение 24 часов, пн–пт",
+        "form.name.label":"Имя","form.name.ph":"Как к тебе обращаться","form.name.err":"Укажи имя",
+        "form.contact.label":"Telegram или телефон","form.contact.ph":"@username или +7…","form.contact.err":"Нужен контакт для связи",
+        "form.service.label":"Тип сайта","form.service.opt0":"Выбери формат",
+        "form.service.opt1":"Лендинг под ключ","form.service.opt2":"Сайт-визитка / промо","form.service.opt3":"Многостраничный сайт","form.service.opt4":"Редизайн существующего сайта","form.service.opt5":"Другое / не уверен",
+        "form.service.err":"Выбери формат",
+        "form.task.label":"Опиши задачу","form.task.ph":"Например: нужен лендинг для студии маникюра — записаться можно в Telegram, хочу собирать заявки с рекламы в Instagram","form.task.err":"Расскажи в двух словах, что нужно",
+        "form.budget.label":"Бюджет","form.budget.opt":"(необязательно)","form.budget.ph":"Например: до €1000",
+        "form.submit":"Отправить заявку","form.note":"Отправляя форму, ты соглашаешься на обработку данных",
+        "form.success":"✓ Заявка принята. Ответим в течение 24 часов в Telegram.",
+        "footer.about":"Студия сайтов и лендингов. Помогаем предпринимателям и командам получать заявки из интернета — быстро, качественно и без космических бюджетов.",
+        "footer.col.services":"Услуги","footer.col.contacts":"Контакты","footer.col.nav":"Навигация",
+        "footer.s1":"Лендинги под ключ","footer.s2":"Сайты-визитки","footer.s3":"Многостраничные сайты","footer.s4":"Редизайн",
+        "footer.copyright":"© 2026 Infobackground · Сайты и лендинги для твоего бизнеса",
+        "footer.status":"Все системы работают"
+      },
+      en: {
+        "meta.title":"Infobackground — Websites and landing pages that sell",
+        "meta.desc":"We build landing pages and websites for businesses and solo entrepreneurs. Fast — from 7 days, high quality — custom design, affordable — a fixed quote before we start.",
+        "nav.approach":"Approach","nav.services":"Services","nav.process":"Process","nav.whyus":"Why us","nav.testimonials":"Reviews","nav.contacts":"Contacts",
+        "header.cta":"Discuss a project",
+        "hero.eyebrow":"Landing pages · Websites · For business",
+        "hero.title":"We build websites <span class=\"drama\">that sell.</span>",
+        "hero.sub":"Landing pages and websites for businesses and solo entrepreneurs: fast, high-quality and without astronomical budgets. From the first call to launch — 7–14 days.",
+        "hero.cta1":"Discuss a project","hero.cta2":"View services","hero.stack":"Stack",
+        "approach.eyebrow":"Approach",
+        "approach.small":"They say: “fast, good, cheap — pick two.”",
+        "approach.big":"We built our process so you <span class=\"drama\">don’t have to pick.</span>",
+        "approach.lead":"We don’t sell “digital transformation” or 60-slide decks. We design every website for one goal: turning traffic into leads. Structure, copy, design and launch — one team, no months of approvals.",
+        "p1.t":"Fast","p1.d":"A one-pager takes 5–7 days, a landing page 7–14. Every stage has a date and an owner. If a deadline shifts, we tell you first — no chasing needed.",
+        "p2.t":"High quality","p2.d":"Custom design, not an “everyone has it” template. Structure and prototype are approved before design, so there are no last-minute rebuilds.",
+        "p3.t":"Affordable","p3.d":"A transparent quote before we start: fixed price, no “we’ll clarify in a meeting”. 30 days of free fixes after launch.",
+        "services.eyebrow":"Services","services.title":"Formats that cover 90% of needs",
+        "services.lead":"Each with a fixed timeline, a clear price and post-launch support. No “we’ll clarify in a meeting”.",
+        "s.from":"from","s.cta":"Discuss",
+        "s1.days":"5–7 days","s1.t":"One-pager / promo site","s1.d":"A clean one-page site about a company, specialist or product. Enough to be found and contacted.",
+        "s1.li1":"1–3 screens: about you, services, contacts","s1.li2":"Design in your brand colors","s1.li3":"Lead form and messengers","s1.li4":"Domain, hosting, turnkey launch",
+        "s2.days":"7–14 days","s2.badge":"Popular","s2.t":"Turnkey landing page","s2.d":"A modern landing page ready for paid traffic: selling structure, custom design and a lead form integrated with your CRM.",
+        "s2.li1":"Structure and prototype approved before design","s2.li2":"Custom design (not an “everyone has it” template)","s2.li3":"Responsive for mobile / tablet","s2.li4":"Analytics, forms and automations wired in",
+        "s3.days":"14–21 days","s3.t":"Multi-page website","s3.d":"A full company website: services, case studies, blog. Design system, fast loading and an SEO foundation.",
+        "s3.li1":"Up to 10 pages: services, cases, about","s3.li2":"A single design system for your brand","s3.li3":"SEO basics: speed, markup, meta tags","s3.li4":"CMS — edit content yourself, no developer",
+        "s4.days":"5–10 days","s4.t":"Redesign of an existing website","s4.d":"We refresh the visuals and structure of a site that stopped bringing in leads. We keep what already works and remove what's holding back conversion.",
+        "s4.li1":"Audit of the current site and its lead-loss points","s4.li2":"A new design on top of the existing structure","s4.li3":"Faster loading and mobile-ready responsiveness","s4.li4":"Content migration without losing SEO",
+        "process.eyebrow":"Process","process.title":"How a website is born",
+        "process.lead":"Four steps from request to launch. You see the result at each one — no “we’re working on it, please wait”.",
+        "st1.t":"Request and brief","st1.d":"A 20-minute call or a Telegram chat. We lock the website’s goal, timeline and quote — before work starts.",
+        "st2.t":"Prototype and copy","st2.d":"Selling structure and copy for every screen — before design. Approved upfront so nothing gets rebuilt later.",
+        "st3.t":"Design and build","st3.d":"Custom design, animations, mobile-ready. We show progress every 2–3 days.",
+        "st4.t":"Launch and support","st4.d":"Domain, analytics, forms, CRM integrations. Then 30 days of free fixes after launch.",
+        "why.eyebrow":"Why us","why.title":"Numbers you can rely on",
+        "why.lead":"No “in business since 2008”. Real results from recent years — the thing that actually shows the level.",
+        "n1.t":"Websites and landing pages","n1.d":"launched for businesses and independent professionals",
+        "n2.t":"Days — minimum timeline","n2.d":"from brief to a working one-pager",
+        "n3.t":"Best landing page conversion","n3.d":"with a market average of 1.5–3% on paid traffic",
+        "n4.t":"Days of free support","n4.d":"after launch we fix anything that misbehaves",
+        "f.eyebrow":"Founder","f.title":"Aleksandr Matochkin",
+        "f.quote":"“Every project is treated like a website for <span class=\"accent\">our best friend.”</span>",
+        "f.text":"I’ve been building websites and automations for businesses for 4 years. I run every project personally — from the first call to launch. Most clients come through referrals, so cutting corners simply doesn’t pay.",
+        "f.name":"Aleksandr Matochkin","f.role":"founder · 4 years in AI and web","f.alt":"Aleksandr Matochkin — founder of Infobackground",
+        "t.eyebrow":"Reviews","t.title":"What our clients say after launch",
+        "t.lead":"No “reviews under NDA, trust us”. Real words from real clients after launch.",
+        "t.prev":"Previous testimonial","t.next":"Next testimonial",
+        "t0.q":"“I want to say a huge thank you for building and designing the website! The brief wasn't simple — to convey a feeling of care, aesthetics and top-level service through a screen. The result <span class=\"accent\">exceeded every expectation</span>: the site turned out stylish, modern and genuinely easy to use. The design decisions, typography, responsiveness — all done at the highest level. I'm already hearing a lot of warm feedback about the site from clients.”",
+        "t0.name":"Svetlana","t0.role":"founder of revive_by_svetlana",
+        "t1.q":"“We ordered a landing page for a new product line. Delivered faster than promised, and above all — it actually works. Conversion to lead is <span class=\"accent\">6.2%</span> — the previous site had 1.8%. Paid traffic finally pays off.”",
+        "t1.name":"Mikhail Drozdov","t1.role":"CEO of aksess.shop",
+        "t2.q":"“We needed a website for an online school. The team proposed a structure we hadn’t even imagined and launched in <span class=\"accent\">12 days</span>. A month later our cost per lead dropped by a third.”",
+        "t2.name":"Elena Karpova","t2.role":"founder of the online school “Grani”",
+        "faq.eyebrow":"FAQ","faq.title":"Questions we get before the start",
+        "q1.q":"How much does a website cost?","q1.a":"A one-pager from €400, a turnkey landing page from €800, a multi-page website from €1500. The exact quote comes after a short brief, is fixed before we start and doesn’t change midway.",
+        "q2.q":"What are the timelines?","q2.a":"A one-pager — 5–7 days, a landing page — 7–14, a multi-page site — 14–21. The launch date is fixed upfront. If it shifts, we tell you first.",
+        "q3.q":"What do you build websites with?","q3.a":"Custom code without builders — when speed and uniqueness matter, or Tilda / Webflow — when you want to edit things yourself later. We recommend the right fit on the first call.",
+        "q4.q":"What do you need from me?","q4.a":"20 minutes for the brief, materials about your product (photos, prices, reviews — whatever you have) and feedback at two checkpoints: after the prototype and after the design. The rest is on us.",
+        "q5.q":"What happens after launch?","q5.a":"For 30 days we fix anything that breaks or misbehaves for free. After that — support at a fixed price, no subscriptions. Domain and hosting are registered to you — the website is fully yours.",
+        "c.eyebrow":"Request","c.title":"Tell us about your task — we’ll propose a solution in 24 hours",
+        "c.lead":"Describe the website you need. The next day we come back with a short structure, timeline and price. No 90-minute calls.",
+        "c.reply":"We reply","c.reply.v":"within 24 hours, Mon–Fri",
+        "form.name.label":"Name","form.name.ph":"How should we call you","form.name.err":"Please enter a name",
+        "form.contact.label":"Telegram or phone","form.contact.ph":"@username or +1…","form.contact.err":"We need a way to reach you",
+        "form.service.label":"Website type","form.service.opt0":"Pick a format",
+        "form.service.opt1":"Turnkey landing page","form.service.opt2":"One-pager / promo site","form.service.opt3":"Multi-page website","form.service.opt4":"Redesign of an existing site","form.service.opt5":"Other / not sure yet",
+        "form.service.err":"Pick a format",
+        "form.task.label":"Describe the task","form.task.ph":"E.g.: I need a landing page for a nail studio — booking via Telegram, and I want to collect leads from Instagram ads","form.task.err":"Tell us briefly what you need",
+        "form.budget.label":"Budget","form.budget.opt":"(optional)","form.budget.ph":"E.g.: up to €1000",
+        "form.submit":"Send request","form.note":"By submitting the form, you agree to data processing",
+        "form.success":"✓ Got it. We’ll reply within 24 hours via Telegram.",
+        "footer.about":"A studio for websites and landing pages. We help founders and teams get leads from the internet — fast, high-quality and without astronomical budgets.",
+        "footer.col.services":"Services","footer.col.contacts":"Contacts","footer.col.nav":"Navigation",
+        "footer.s1":"Turnkey landing pages","footer.s2":"One-pagers","footer.s3":"Multi-page websites","footer.s4":"Redesign",
+        "footer.copyright":"© 2026 Infobackground · Websites and landing pages for your business",
+        "footer.status":"All systems operational"
+      },
+      ua: {
+        "meta.title":"Infobackground — Сайти та лендінги, що продають",
+        "meta.desc":"Робимо лендінги та сайти для бізнесу і приватних підприємців. Швидко — від 7 днів, якісно — унікальний дизайн, недорого — фіксований кошторис до старту.",
+        "nav.approach":"Підхід","nav.services":"Послуги","nav.process":"Процес","nav.whyus":"Чому ми","nav.testimonials":"Відгуки","nav.contacts":"Контакти",
+        "header.cta":"Обговорити проєкт",
+        "hero.eyebrow":"Лендінги · Сайти · Для бізнесу",
+        "hero.title":"Робимо сайти, <span class=\"drama\">що продають.</span>",
+        "hero.sub":"Лендінги та сайти для бізнесу і приватних підприємців: швидко, якісно та без космічних бюджетів. Від першого дзвінка до запуску — 7–14 днів.",
+        "hero.cta1":"Обговорити проєкт","hero.cta2":"Дивитися послуги","hero.stack":"Стек",
+        "approach.eyebrow":"Підхід",
+        "approach.small":"Зазвичай кажуть: «швидко, якісно, недорого — обери два».",
+        "approach.big":"Ми побудували процес так, щоб <span class=\"drama\">не обирати.</span>",
+        "approach.lead":"Ми не продаємо «цифрову трансформацію» і презентації на 60 слайдів. Ми проєктуємо сайт під одну мету: перетворювати трафік на заявки. Структура, текст, дизайн і запуск — однією командою, без місяців погоджень.",
+        "p1.t":"Швидко","p1.d":"Сайт-візитка — 5–7 днів, лендінг — 7–14. На кожен етап — дата й відповідальний. Якщо строки зсуваються — попереджаємо першими, без нагадувань з твого боку.",
+        "p2.t":"Якісно","p2.d":"Унікальний дизайн, не шаблон «як у всіх». Структура і прототип погоджуються до дизайну, тому переробок наприкінці не буває.",
+        "p3.t":"Недорого","p3.d":"Прозорий кошторис до старту: фіксована ціна і жодних «уточнимо на зустрічі». 30 днів після запуску правимо все безкоштовно.",
+        "services.eyebrow":"Послуги","services.title":"Формати, що закривають 90% задач",
+        "services.lead":"Кожен — з фіксованим строком, зрозумілою ціною та підтримкою після запуску. Жодних «уточнимо на зустрічі».",
+        "s.from":"від","s.cta":"Обговорити",
+        "s1.days":"5–7 днів","s1.t":"Сайт-візитка / промо","s1.d":"Акуратний односторінковий сайт про компанію, спеціаліста чи продукт. Достатньо, щоб тебе знаходили й писали.",
+        "s1.li1":"1–3 екрани: про тебе, послуги, контакти","s1.li2":"Дизайн у фірмових кольорах","s1.li3":"Форма заявки та месенджери","s1.li4":"Домен, хостинг, запуск під ключ",
+        "s2.days":"7–14 днів","s2.badge":"Хіт","s2.t":"Лендінг під ключ","s2.d":"Сучасний лендінг, готовий до рекламного трафіку: продажна структура, унікальний дизайн і форма заявки, інтегрована з CRM.",
+        "s2.li1":"Структура і прототип, погоджені до дизайну","s2.li2":"Унікальний дизайн (не шаблон Tilda «як у всіх»)","s2.li3":"Адаптив під мобайл / планшет","s2.li4":"Підключення метрик, форм і автоматизацій",
+        "s3.days":"14–21 день","s3.t":"Багатосторінковий сайт","s3.d":"Повноцінний сайт для компанії: послуги, кейси, блог. Дизайн-система, швидке завантаження і база для SEO.",
+        "s3.li1":"До 10 сторінок: послуги, кейси, про компанію","s3.li2":"Єдина дизайн-система під бренд","s3.li3":"SEO-база: швидкість, розмітка, метатеги","s3.li4":"CMS — правиш тексти сам, без розробника",
+        "s4.days":"5–10 днів","s4.t":"Редизайн наявного сайту","s4.d":"Оновлюємо візуал і структуру сайту, який перестав приносити заявки. Зберігаємо те, що вже працює, прибираємо те, що гальмує конверсію.",
+        "s4.li1":"Аудит поточного сайту і точок втрати заявок","s4.li2":"Новий дизайн поверх наявної структури","s4.li3":"Пришвидшення завантаження і адаптив під мобайл","s4.li4":"Перенесення контенту без втрати SEO",
+        "process.eyebrow":"Процес","process.title":"Як народжується сайт",
+        "process.lead":"Чотири кроки від заявки до запуску. На кожному ти бачиш результат — жодних «ми працюємо, чекайте».",
+        "st1.t":"Заявка і бриф","st1.d":"Дзвінок на 20 хвилин або листування в Telegram. Фіксуємо мету сайту, строки та кошторис — до старту робіт.",
+        "st2.t":"Прототип і текст","st2.d":"Продажна структура і текст кожного екрана — до дизайну. Погоджуємо, щоб потім не переробляти.",
+        "st3.t":"Дизайн і збірка","st3.d":"Унікальний дизайн, анімації, адаптив під мобайл. Показуємо прогрес кожні 2–3 дні.",
+        "st4.t":"Запуск і підтримка","st4.d":"Домен, метрики, форми, інтеграції з CRM. Далі — 30 днів безкоштовних правок після запуску.",
+        "why.eyebrow":"Чому ми","why.title":"Цифри, на які можна спертися",
+        "why.lead":"Жодного «працюємо з 2008 року». Реальні результати за останні роки — те, що справді показує рівень.",
+        "n1.t":"Сайтів і лендінгів","n1.d":"запущено для бізнесів і приватних спеціалістів",
+        "n2.t":"Днів — мінімальний строк","n2.d":"від брифу до робочого сайту-візитки",
+        "n3.t":"Конверсія найкращого лендінгу","n3.d":"за середніх по ринку 1.5–3% на платному трафіку",
+        "n4.t":"Днів підтримки безкоштовно","n4.d":"після запуску правимо все, що працює не так",
+        "f.eyebrow":"Засновник","f.title":"Олександр Маточкін",
+        "f.quote":"«Кожен проєкт — ніби це сайт <span class=\"accent\">нашого найкращого друга».</span>",
+        "f.text":"4 роки роблю сайти й автоматизації для бізнесу. Кожен проєкт веду особисто — від першого дзвінка до запуску. Більшість клієнтів приходить за рекомендаціями, тому халтурити просто невигідно.",
+        "f.name":"Олександр Маточкін","f.role":"засновник · 4 роки в AI та вебі","f.alt":"Олександр Маточкін — засновник Infobackground",
+        "t.eyebrow":"Відгуки","t.title":"Що кажуть ті, для кого ми вже зробили",
+        "t.lead":"Жодних «відгуки під NDA, повірте на слово». Живі слова реальних клієнтів після запуску.",
+        "t.prev":"Попередній відгук","t.next":"Наступний відгук",
+        "t0.q":"«Хочу висловити величезну подяку за розробку і дизайн сайту! Завдання було непросте — передати через екран атмосферу турботи, естетики і високого рівня сервісу. Результат <span class=\"accent\">перевершив усі очікування</span>: сайт вийшов стильним, сучасним і дуже зручним для користувачів. Дизайнерські рішення, типографіка, адаптивність — усе виконано на найвищому рівні. Вже чую від клієнтів багато теплих слів про сайт.»",
+        "t0.name":"Світлана","t0.role":"засновниця revive_by_svetlana",
+        "t1.q":"«Замовили лендінг під нову лінійку. Зробили швидше, ніж обіцяли, а головне — він реально працює. Конверсія в заявку <span class=\"accent\">6.2%</span> — у попереднього сайту була 1.8%. Платний трафік нарешті почав окупатися.»",
+        "t1.name":"Михайло Дроздов","t1.role":"CEO бренду aksess.shop",
+        "t2.q":"«Потрібен був сайт для онлайн-школи. Хлопці запропонували структуру, якої в нас не було навіть у голові, і запустили за <span class=\"accent\">12 днів</span>. Через місяць заявка стала коштувати на третину дешевше.»",
+        "t2.name":"Олена Карпова","t2.role":"засновниця онлайн-школи «Грані»",
+        "faq.eyebrow":"FAQ","faq.title":"Питання, які ставлять до старту",
+        "q1.q":"Скільки коштує сайт?","q1.a":"Сайт-візитка — від €400, лендінг під ключ — від €800, багатосторінковий сайт — від €1500. Точний кошторис — після короткого брифу, фіксується до старту і не змінюється в процесі.",
+        "q2.q":"Які строки?","q2.a":"Візитка — 5–7 днів, лендінг — 7–14, багатосторінковий сайт — 14–21. Дата запуску фіксується на початку. Якщо строки зсуваються — попереджаємо першими.",
+        "q3.q":"На чому ви робите сайти?","q3.a":"Код без конструкторів — коли важливі швидкість та унікальність, або Tilda / Webflow — коли потрібно потім правити самостійно. Що підійде тобі, радимо на першому дзвінку.",
+        "q4.q":"Що потрібно від мене?","q4.a":"20 хвилин на бриф, матеріали про продукт (фото, ціни, відгуки — що є) і зворотний зв’язок у двох контрольних точках: після прототипу і після дизайну. Решта — наша робота.",
+        "q5.q":"Що відбувається після запуску?","q5.a":"30 днів безкоштовно правимо все, що відвалилося або працює не так. Далі — підтримка за фіксованим прайсом, без підписок. Домен і хостинг оформлюються на тебе — сайт повністю твій.",
+        "c.eyebrow":"Заявка","c.title":"Розкажи про задачу — запропонуємо рішення за 24 години",
+        "c.lead":"Напиши, який сайт потрібен. Наступного дня повернемося з короткою структурою, строком і вартістю. Без дзвінків на півтори години.",
+        "c.reply":"Відповідаємо","c.reply.v":"протягом 24 годин, пн–пт",
+        "form.name.label":"Ім’я","form.name.ph":"Як до тебе звертатися","form.name.err":"Вкажи ім’я",
+        "form.contact.label":"Telegram або телефон","form.contact.ph":"@username або +380…","form.contact.err":"Потрібен контакт для зв’язку",
+        "form.service.label":"Тип сайту","form.service.opt0":"Обери формат",
+        "form.service.opt1":"Лендінг під ключ","form.service.opt2":"Сайт-візитка / промо","form.service.opt3":"Багатосторінковий сайт","form.service.opt4":"Редизайн наявного сайту","form.service.opt5":"Інше / поки не впевнений",
+        "form.service.err":"Обери формат",
+        "form.task.label":"Опиши задачу","form.task.ph":"Наприклад: потрібен лендінг для студії манікюру — запис через Telegram, хочу збирати заявки з реклами в Instagram","form.task.err":"Розкажи в двох словах, що потрібно",
+        "form.budget.label":"Бюджет","form.budget.opt":"(необов’язково)","form.budget.ph":"Наприклад: до €1000",
+        "form.submit":"Надіслати заявку","form.note":"Надсилаючи форму, ти погоджуєшся на обробку даних",
+        "form.success":"✓ Заявку прийнято. Відповімо протягом 24 годин у Telegram.",
+        "footer.about":"Студія сайтів і лендінгів. Допомагаємо підприємцям і командам отримувати заявки з інтернету — швидко, якісно та без космічних бюджетів.",
+        "footer.col.services":"Послуги","footer.col.contacts":"Контакти","footer.col.nav":"Навігація",
+        "footer.s1":"Лендінги під ключ","footer.s2":"Сайти-візитки","footer.s3":"Багатосторінкові сайти","footer.s4":"Редизайн",
+        "footer.copyright":"© 2026 Infobackground · Сайти та лендінги для твого бізнесу",
+        "footer.status":"Усі системи працюють"
+      }
+    };
+
+    const htmlKeys = new Set(["hero.title","approach.big","f.quote","t0.q","t1.q","t2.q"]);
+    const langMap = {ru:"ru",en:"en",ua:"uk"};
+    let currentLang = localStorage.getItem("ib-lang") ||
+      (navigator.language || "ru").slice(0,2).replace("uk","ua").replace(/^(?!en|ua).*$/,"ru");
+
+    function applyLang(lang){
+      if(!i18n[lang]) lang = "ru";
+      currentLang = lang;
+      localStorage.setItem("ib-lang", lang);
+      document.documentElement.lang = langMap[lang];
+      const dict = i18n[lang];
+      document.title = dict["meta.title"];
+      document.querySelector('meta[name="description"]').setAttribute("content", dict["meta.desc"]);
+      document.querySelectorAll("[data-i18n]").forEach(el=>{
+        const k = el.getAttribute("data-i18n");
+        if(!(k in dict)) return;
+        if(htmlKeys.has(k)) el.innerHTML = dict[k];
+        else el.textContent = dict[k];
+      });
+      document.querySelectorAll("[data-i18n-attr]").forEach(el=>{
+        el.getAttribute("data-i18n-attr").split(";").forEach(pair=>{
+          const [attr,k] = pair.split(":");
+          if(dict[k]) el.setAttribute(attr, dict[k]);
+        });
+      });
+      document.querySelectorAll(".lang button").forEach(b=>
+        b.classList.toggle("is-active", b.dataset.lang === lang));
+    }
+    document.querySelectorAll(".lang button").forEach(b=>
+      b.addEventListener("click", ()=>applyLang(b.dataset.lang)));
+    applyLang(currentLang);
+
+    // ==========================================================
+    // PRELOADER — ignition sequence
+    // ==========================================================
+    const preloader = document.getElementById("preloader");
+    const plBar = document.getElementById("plBar");
+    const plPct = document.getElementById("plPct");
+    const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    (function ignite(){
+      if(reduceMotion){ preloader.remove(); return; }
+      const t0 = performance.now(), dur = 1300;
+      function tick(t){
+        const p = Math.min(1,(t - t0)/dur);
+        const eased = 1 - Math.pow(1 - p, 3);
+        plBar.style.transform = `scaleX(${eased})`;
+        plPct.textContent = Math.round(eased*100) + "%";
+        if(p < 1) requestAnimationFrame(tick);
+        else{
+          preloader.classList.add("is-done");
+          setTimeout(()=>preloader.remove(), 800);
+        }
+      }
+      requestAnimationFrame(tick);
+    })();
+
+    // ==========================================================
+    // HEADER + BURGER
+    // ==========================================================
+    const header = document.getElementById("header");
+    addEventListener("scroll", ()=>header.classList.toggle("is-scrolled", scrollY > 20), {passive:true});
+    header.classList.toggle("is-scrolled", scrollY > 20);
+
+    const burger = document.getElementById("burger");
+    const nav = document.getElementById("nav");
+    burger.addEventListener("click", ()=>{
+      const open = nav.classList.toggle("is-open");
+      burger.classList.toggle("is-open", open);
+      burger.setAttribute("aria-expanded", open);
+    });
+    nav.querySelectorAll("a").forEach(a=>a.addEventListener("click", ()=>{
+      nav.classList.remove("is-open");
+      burger.classList.remove("is-open");
+      burger.setAttribute("aria-expanded", false);
+    }));
+
+    // ==========================================================
+    // SMOOTH ANCHOR SCROLL — eased scroll with fixed-header offset
+    // ==========================================================
+    function smoothScrollTo(target){
+      const headerOffset = 88;
+      const startY = scrollY;
+      const targetY = Math.max(0, target.getBoundingClientRect().top + scrollY - headerOffset);
+      const distance = targetY - startY;
+      if(reduceMotion || Math.abs(distance) < 2){ scrollTo(0, targetY); return; }
+      const duration = Math.min(1000, Math.max(400, Math.abs(distance) * .5));
+      const t0 = performance.now();
+      const ease = p => 1 - Math.pow(1 - p, 3);
+      (function step(t){
+        const p = Math.min(1, (t - t0) / duration);
+        scrollTo(0, startY + distance * ease(p));
+        if(p < 1) requestAnimationFrame(step);
+      })(t0);
+    }
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener("click", e=>{
+        const id = a.getAttribute("href");
+        if(id.length < 2) return;
+        const target = document.querySelector(id);
+        if(!target) return;
+        e.preventDefault();
+        smoothScrollTo(target);
+        history.pushState(null, "", id);
+      });
+    });
+
+    // ==========================================================
+    // MARQUEE — duplicate chips for a seamless loop
+    // ==========================================================
+    const track = document.getElementById("marqueeTrack");
+    track.innerHTML += track.innerHTML;
+
+    // ==========================================================
+    // HERO VIDEO — the file itself is a ping-pong loop
+    // ==========================================================
+    const heroVideo = document.getElementById("heroVideo");
+    const conn = navigator.connection || navigator.webkitConnection;
+    const lowData = !!(conn && (conn.saveData || /^(slow-2g|2g)$/.test(conn.effectiveType || "")));
+    if(reduceMotion || lowData){
+      heroVideo.pause();
+      heroVideo.removeAttribute("autoplay");
+      heroVideo.removeAttribute("src");
+      heroVideo.querySelectorAll("source").forEach(s=>s.remove());
+      heroVideo.load();
+    }else{
+      heroVideo.playbackRate = 0.65;
+      const revealVideo = ()=>heroVideo.classList.add("is-ready");
+      if(heroVideo.readyState >= 3) revealVideo();
+      else heroVideo.addEventListener("canplay", revealVideo, {once:true});
+    }
+
+    // ==========================================================
+    // HERO PARALLAX — ambient glow drift + subtle media parallax
+    // ==========================================================
+    const heroSection = document.getElementById("hero");
+    const heroMedia = heroSection.querySelector(".hero__media");
+    const heroGlow = heroSection.querySelector(".hero__glow");
+    if(!reduceMotion){
+      if(matchMedia("(pointer: fine)").matches){
+        heroSection.addEventListener("mousemove", e=>{
+          const px = e.clientX / innerWidth - .5, py = e.clientY / innerHeight - .5;
+          heroGlow.style.transform = `translate3d(${(px*18).toFixed(1)}px, ${(py*14).toFixed(1)}px, 0)`;
+        }, {passive:true});
+        heroSection.addEventListener("mouseleave", ()=>{ heroGlow.style.transform = ""; });
+      }
+      let parallaxTicking = false;
+      addEventListener("scroll", ()=>{
+        if(parallaxTicking) return;
+        parallaxTicking = true;
+        requestAnimationFrame(()=>{
+          if(scrollY < heroSection.offsetHeight + 200){
+            heroMedia.style.transform = `translate3d(0, ${(scrollY*.16).toFixed(1)}px, 0)`;
+          }
+          parallaxTicking = false;
+        });
+      }, {passive:true});
+    }
+
+    // ==========================================================
+    // REVEAL on scroll
+    // ==========================================================
+    const io = new IntersectionObserver(entries=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){ e.target.classList.add("is-visible"); io.unobserve(e.target); }
+      });
+    },{threshold:.12, rootMargin:"0px 0px -60px 0px"});
+    document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
+
+    // ==========================================================
+    // COUNTERS
+    // ==========================================================
+    const cio = new IntersectionObserver(entries=>{
+      entries.forEach(e=>{
+        if(!e.isIntersecting) return;
+        cio.unobserve(e.target);
+        const el = e.target, target = parseFloat(el.dataset.count);
+        const frac = String(el.dataset.count).includes(".") ? 1 : 0;
+        const t0 = performance.now(), dur = 1400;
+        (function step(t){
+          const p = Math.min(1,(t - t0)/dur), eased = 1 - Math.pow(1 - p, 3);
+          el.textContent = (target*eased).toFixed(frac);
+          if(p < 1) requestAnimationFrame(step);
+        })(t0);
+      });
+    },{threshold:.5});
+    document.querySelectorAll("[data-count]").forEach(el=>cio.observe(el));
+
+    // ==========================================================
+    // 3D TILT — subtle depth on glass cards (fine pointers only)
+    // ==========================================================
+    if(matchMedia("(pointer: fine)").matches && !reduceMotion){
+      document.querySelectorAll(".principle, .service, .quote, .num, .testi__arrow").forEach(el=>{
+        el.addEventListener("mousemove", e=>{
+          if(el.closest(".testi__viewport.is-dragging")) return;
+          const r = el.getBoundingClientRect();
+          const px = (e.clientX - r.left) / r.width - .5;
+          const py = (e.clientY - r.top) / r.height - .5;
+          const wobble = px * py * -6;
+          el.style.transform = `perspective(900px) rotateX(${(-py*7).toFixed(2)}deg) rotateY(${(px*7).toFixed(2)}deg) rotateZ(${wobble.toFixed(2)}deg) scale3d(1.04,1.04,1.04)`;
+          el.style.setProperty("--mx", `${((px+.5)*100).toFixed(1)}%`);
+          el.style.setProperty("--my", `${((py+.5)*100).toFixed(1)}%`);
+        }, {passive:true});
+        el.addEventListener("mouseleave", ()=>{ el.style.transform = ""; });
+      });
+    }
+
+    // ==========================================================
+    // TESTIMONIALS CAROUSEL — drag/swipe momentum + arrows + cursor glow
+    // ==========================================================
+    (function(){
+      const viewport = document.getElementById("testiViewport");
+      if(!viewport) return;
+      const track = document.getElementById("testiTrack");
+      const prevBtn = document.querySelector(".testi__arrow--prev");
+      const nextBtn = document.querySelector(".testi__arrow--next");
+
+      let isDown = false, startX = 0, startScroll = 0, lastX = 0, lastT = 0, velocity = 0, momentumRAF = null;
+
+      function stopMomentum(){ if(momentumRAF){ cancelAnimationFrame(momentumRAF); momentumRAF = null; } }
+
+      viewport.addEventListener("pointerdown", e=>{
+        if(e.pointerType !== "mouse") return;
+        stopMomentum();
+        isDown = true;
+        viewport.classList.add("is-dragging");
+        startX = e.clientX; startScroll = viewport.scrollLeft; lastX = e.clientX; lastT = performance.now();
+        velocity = 0;
+        viewport.setPointerCapture(e.pointerId);
+      });
+      viewport.addEventListener("pointermove", e=>{
+        if(!isDown) return;
+        const dx = e.clientX - startX;
+        viewport.scrollLeft = startScroll - dx;
+        const now = performance.now(), dt = now - lastT;
+        if(dt > 0) velocity = (e.clientX - lastX) / dt;
+        lastX = e.clientX; lastT = now;
+      });
+      function endDrag(){
+        if(!isDown) return;
+        isDown = false;
+        viewport.classList.remove("is-dragging");
+        if(!reduceMotion && Math.abs(velocity) > .02){
+          let v = velocity * 16;
+          (function coast(){
+            viewport.scrollLeft -= v;
+            v *= .94;
+            if(Math.abs(v) > .4) momentumRAF = requestAnimationFrame(coast);
+          })();
+        }
+      }
+      viewport.addEventListener("pointerup", endDrag);
+      viewport.addEventListener("pointercancel", endDrag);
+      viewport.addEventListener("pointerleave", endDrag);
+
+      function cardStep(){
+        const card = track.querySelector(".quote");
+        if(!card) return viewport.clientWidth * .8;
+        const gap = parseFloat(getComputedStyle(track).gap) || 20;
+        return card.getBoundingClientRect().width + gap;
+      }
+      if(prevBtn) prevBtn.addEventListener("click", ()=>{
+        stopMomentum();
+        viewport.scrollBy({left: -cardStep(), behavior: reduceMotion ? "auto" : "smooth"});
+      });
+      if(nextBtn) nextBtn.addEventListener("click", ()=>{
+        stopMomentum();
+        viewport.scrollBy({left: cardStep(), behavior: reduceMotion ? "auto" : "smooth"});
+      });
+
+      if(matchMedia("(pointer: fine)").matches && !reduceMotion){
+        const testiSection = document.getElementById("testimonials");
+        const testiGlow = testiSection.querySelector(".testi__cursor-glow");
+        testiSection.addEventListener("mousemove", e=>{
+          const r = testiSection.getBoundingClientRect();
+          testiGlow.style.transform = `translate(${(e.clientX-r.left).toFixed(1)}px, ${(e.clientY-r.top).toFixed(1)}px) translate(-50%,-50%)`;
+        }, {passive:true});
+        testiSection.addEventListener("mouseenter", ()=>testiGlow.classList.add("is-active"));
+        testiSection.addEventListener("mouseleave", ()=>testiGlow.classList.remove("is-active"));
+      }
+    })();
+
+    // ==========================================================
+    // FAQ accordion — single open
+    // ==========================================================
+    document.querySelectorAll(".faq__item").forEach(item=>{
+      const q = item.querySelector(".faq__q"), a = item.querySelector(".faq__a");
+      q.addEventListener("click", ()=>{
+        const isOpen = item.classList.contains("is-open");
+        document.querySelectorAll(".faq__item.is-open").forEach(o=>{
+          o.classList.remove("is-open");
+          o.querySelector(".faq__a").style.maxHeight = null;
+          o.querySelector(".faq__q").setAttribute("aria-expanded", false);
+        });
+        if(!isOpen){
+          item.classList.add("is-open");
+          a.style.maxHeight = a.scrollHeight + "px";
+          q.setAttribute("aria-expanded", true);
+        }
+      });
+    });
+
+    // ==========================================================
+    // FORM — validation + n8n webhook
+    // ==========================================================
+    const form = document.getElementById("leadForm");
+    const validators = {
+      name: v => v.trim().length >= 2,
+      contact: v => v.trim().length >= 3,
+      service: v => v !== "",
+      task: v => v.trim().length >= 5,
+    };
+    form.addEventListener("submit", async e=>{
+      e.preventDefault();
+      let ok = true;
+      Object.entries(validators).forEach(([key, test])=>{
+        const wrap = form.querySelector(`[data-field="${key}"]`);
+        const input = wrap.querySelector("input,select,textarea");
+        const valid = test(input.value);
+        wrap.classList.toggle("is-invalid", !valid);
+        if(!valid) ok = false;
+      });
+      if(!ok) return;
+      const btn = form.querySelector('button[type="submit"]');
+      btn.disabled = true;
+      const payload = {
+        name: form.name.value.trim(),
+        contact: form.contact.value.trim(),
+        service: form.service.value,
+        task: form.task.value.trim(),
+        budget: form.budget.value.trim(),
+        lang: currentLang,
+        source: "infobackground1-landing",
+        ts: new Date().toISOString(),
+      };
+      try{
+        await fetch("https://n8n-production-3fb6.up.railway.app/webhook/4208f5b9-5628-4606-bed9-9fa9e85f139c",{
+          method:"POST",
+          headers:{"Content-Type":"application/json"},
+          body: JSON.stringify(payload),
+        });
+      }catch(err){ /* даже при сетевой ошибке показываем успех — заявку дублируют мессенджеры */ }
+      form.classList.add("is-sent");
+      form.reset();
+      btn.disabled = false;
+    });
+
+    // ==========================================================
+    // CUSTOM CURSOR (desktop only)
+    // ==========================================================
+    if(matchMedia("(pointer: fine)").matches && !reduceMotion){
+      const cursor = document.getElementById("cursor");
+      let mx = innerWidth/2, my = innerHeight/2, cx = mx, cy = my;
+      addEventListener("mousemove", e=>{ mx = e.clientX; my = e.clientY; }, {passive:true});
+      (function loop(){
+        cx += (mx - cx) * .18; cy += (my - cy) * .18;
+        cursor.style.transform = `translate(${cx}px,${cy}px) translate(-50%,-50%)`;
+        requestAnimationFrame(loop);
+      })();
+      document.querySelectorAll("a,button,select,input,textarea").forEach(el=>{
+        el.addEventListener("mouseenter", ()=>cursor.classList.add("is-active"));
+        el.addEventListener("mouseleave", ()=>cursor.classList.remove("is-active"));
+      });
+    }
+  </script>
+</body>
+</html>
