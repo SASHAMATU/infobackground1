@@ -41,13 +41,27 @@ export default function Contact() {
   const formRef = useReveal<HTMLFormElement>();
   const formId = useId();
 
+  const initialValues = { name: "", contact: "", service: "", task: "", budget: "" };
   const [state, formAction] = useActionState(submitLead, initialState);
   const [touched, setTouched] = useState<Partial<Record<LeadField, boolean>>>({});
-  const [values, setValues] = useState({ name: "", contact: "", service: "", task: "" });
+  const [values, setValues] = useState(initialValues);
   const idempotencyKey = useMemo(
     () => (typeof crypto !== "undefined" ? crypto.randomUUID() : String(Date.now())),
     [state]
   );
+
+  // Clear the (controlled) fields the instant a submission succeeds. Done
+  // during render, not in an effect, so it resolves before paint instead
+  // of triggering an extra commit — see
+  // https://react.dev/learn/you-might-not-need-an-effect#adjusting-some-state-when-a-prop-changes
+  const [resetForStatus, setResetForStatus] = useState(state.status);
+  if (state.status !== resetForStatus) {
+    setResetForStatus(state.status);
+    if (state.status === "success") {
+      setValues(initialValues);
+      setTouched({});
+    }
+  }
 
   useEffect(() => {
     if (state.status === "success") {
@@ -174,7 +188,14 @@ export default function Contact() {
             <label htmlFor={`${formId}-budget`}>
               <span>{t("form.budget.label")}</span> <small>{t("form.budget.opt")}</small>
             </label>
-            <input id={`${formId}-budget`} name="budget" type="text" placeholder={t("form.budget.ph")} />
+            <input
+              id={`${formId}-budget`}
+              name="budget"
+              type="text"
+              placeholder={t("form.budget.ph")}
+              value={values.budget}
+              onChange={(e) => setValues((v) => ({ ...v, budget: e.target.value }))}
+            />
           </div>
 
           <SubmitButton />

@@ -51,21 +51,27 @@ export async function submitLead(
     return { status: "error", message: "rate_limited" };
   }
 
+  // Generated once and shared by both writes so the Telegram notification
+  // always matches the row's timestamp, even though the two run in
+  // parallel and either one can fail independently of the other.
+  const createdAt = new Date().toISOString();
+
   const supabase = getSupabaseServerClient();
   const results = await Promise.allSettled([
     supabase
       ? supabase.from("leads").insert({
           name: payload.name,
           contact: payload.contact,
-          service: payload.service,
+          site_type: payload.service,
           task: payload.task,
           budget: payload.budget || null,
           lang: payload.lang,
           source: "infobackground-web",
           idempotency_key: idempotencyKey || null,
+          created_at: createdAt,
         })
       : Promise.resolve({ error: null, skipped: true }),
-    sendTelegramLeadNotification(payload),
+    sendTelegramLeadNotification({ ...payload, createdAt }),
   ]);
 
   const [supabaseResult] = results;
