@@ -67,24 +67,32 @@ can't invoke one directly). Both entry points write through the same
 `deliverLead()` function in `src/lib/leadPipeline.ts`, so validation, the
 `leads` table, and Telegram notifications are identical either way.
 
-Because it's an unauthenticated, cross-origin, database-writing endpoint,
-it's locked to an explicit origin allow-list (not a wildcard) via
-`corsHeaders()` in `src/app/api/lead/route.ts`:
+`index.html` points `LEAD_API_URL` at the **relative** path `/api/lead`,
+so the browser always resolves it against whatever origin `index.html`
+itself was served from. In production this means `web/` must be deployed
+on the exact same domain that serves the root `index.html` — there's no
+separate URL to keep in sync.
+
+Because it's an unauthenticated, database-writing endpoint, `src/app/api/lead/route.ts`
+still locks it to an explicit origin allow-list (not a wildcard) via
+`corsHeaders()`, as defense in depth and to support testing the static
+file against a *separately hosted* origin if you ever need to:
 
 - Defaults to `https://infobackground.com`, `https://www.infobackground.com`,
-  and `http://localhost:8000` / `http://127.0.0.1:8000` (for testing the
-  static file locally via `python3 -m http.server 8000`).
-- Override with the `LEAD_CORS_ORIGIN` env var (comma-separated) once the
-  static site's real domain is finalized.
+  and `http://localhost:8000` / `http://127.0.0.1:8000`.
+- Override with the `LEAD_CORS_ORIGIN` env var (comma-separated).
 - Requests from a disallowed `Origin` get `403 origin_not_allowed`.
 
-`index.html` points `LEAD_API_URL` at `https://infobackground.com/api/lead`
-— i.e. this app is expected to be deployed on the same production domain
-as the static site, making the real request same-origin (CORS only
-actually matters for local testing, e.g. running the static file via
-`python3 -m http.server 8000` against `next dev` on `localhost:3000`). If
-the production domain ever changes, update `LEAD_API_URL` in `index.html`
-to match.
+Note the relative path means these CORS rules don't apply to the normal
+same-origin production request at all (no `Origin` header is even sent
+for a same-origin fetch) — they only matter if `index.html` is ever
+served from a *different* origin than `web/`. In particular, running the
+static file locally via `python3 -m http.server 8000` against `next dev`
+on `localhost:3000` no longer works out of the box, since `/api/lead`
+would resolve to `localhost:8000` (nothing listening there) instead of
+`localhost:3000`. To test that flow locally, either serve `index.html`
+through the Next.js app itself, or temporarily hardcode
+`LEAD_API_URL = "http://localhost:3000/api/lead"` in your local copy.
 
 ### Deploying
 
@@ -95,10 +103,10 @@ to match.
    project to the Production environment only.** Preview deploys sharing
    the same values will pollute real analytics data and spam the real
    Telegram chat with every PR's test submissions.
-4. Deploy under the `infobackground.com` production domain so
-   `LEAD_API_URL` in the root `index.html` (already set to
-   `https://infobackground.com/api/lead`) resolves correctly — see
-   previous section.
+4. Deploy this app on the exact same domain that serves the root
+   `index.html` — `LEAD_API_URL` is a relative path (`/api/lead`), so it
+   only resolves correctly if both are on one origin. See previous
+   section.
 
 ## What's still open
 
