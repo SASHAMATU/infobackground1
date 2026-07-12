@@ -1,8 +1,7 @@
 "use server";
 
 import { headers } from "next/headers";
-import { getSupabaseServerClient } from "@/lib/supabase/server";
-import { sendTelegramLeadNotification } from "@/lib/telegram";
+import { deliverLead } from "@/lib/leadPipeline";
 import { checkLeadRateLimit } from "@/lib/rateLimit";
 import { validateLead, type LeadField } from "@/lib/validators";
 
@@ -11,8 +10,6 @@ export interface LeadActionState {
   message?: string;
   fieldErrors?: Partial<Record<LeadField, boolean>>;
 }
-
-const SUPABASE_UNIQUE_VIOLATION = "23505";
 
 export async function submitLead(
   _prevState: LeadActionState,
@@ -51,57 +48,13 @@ export async function submitLead(
     return { status: "error", message: "rate_limited" };
   }
 
-  // Generated once and shared by both writes so the Telegram notification
-  // always matches the row's timestamp, even though the two run in
-  // parallel and either one can fail independently of the other.
-  const createdAt = new Date().toISOString();
+  const { supabaseOk, telegramOk, configured } = await deliverLead(payload, {
+    idempotencyKey,
+    source: "infobackground-web",
+  });
 
-  const supabase = getSupabaseServerClient();
-  const results = await Promise.allSettled([
-    supabase
-      ? supabase.from("leads").insert({
-          name: payload.name,
-          contact: payload.contact,
-          site_type: payload.service,
-          task: payload.task,
-          budget: payload.budget || null,
-          lang: payload.lang,
-          source: "infobackground-web",
-          idempotency_key: idempotencyKey || null,
-          created_at: createdAt,
-        })
-      : Promise.resolve({ error: null, skipped: true }),
-    sendTelegramLeadNotification({ ...payload, createdAt }),
-  ]);
-
-  const [supabaseResult] = results;
-  let supabaseOk = !supabase; // if not configured, don't block success on it
-  if (supabaseResult.status === "fulfilled") {
-    const value = supabaseResult.value as { error: { code?: string } | null };
-    if (!value.error) {
-      supabaseOk = true;
-    } else if (value.error.code === SUPABASE_UNIQUE_VIOLATION) {
-      // Duplicate submission (retry after a network hiccup, double-click
-      // that slipped past the client guard) — treat as success, not error.
-      supabaseOk = true;
-    } else {
-      console.error("Supabase lead insert failed:", value.error);
-    }
-  } else {
-    console.error("Supabase lead insert threw:", supabaseResult.reason);
-  }
-
-  const telegramResult = results[1];
-  const telegramOk = telegramResult.status === "fulfilled" && telegramResult.value === true;
-  if (telegramResult.status === "rejected") {
-    console.error("Telegram notification threw:", telegramResult.reason);
-  }
-
-  if (!supabase && !process.env.TELEGRAM_BOT_TOKEN) {
-    return {
-      status: "error",
-      message: "not_configured",
-    };
+  if (!configured) {
+    return { status: "error", message: "not_configured" };
   }
 
   if (!supabaseOk && !telegramOk) {

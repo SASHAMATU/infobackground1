@@ -1594,8 +1594,13 @@
     });
 
     // ==========================================================
-    // FORM — validation + n8n webhook
+    // FORM — validation + lead API (Supabase + Telegram, server-side)
     // ==========================================================
+    // TODO before going live: replace with the deployed web/ app's real
+    // origin (Vercel URL or custom domain), e.g. "https://app.infobackground.com".
+    // That app's LEAD_CORS_ORIGIN env var must include this static site's
+    // own origin or the request will be rejected — see web/README.md.
+    const LEAD_API_URL = "https://TODO-REPLACE-WITH-DEPLOYED-APP-ORIGIN.example/api/lead";
     const form = document.getElementById("leadForm");
     const validators = {
       name: v => v.trim().length >= 2,
@@ -1623,16 +1628,21 @@
         task: form.task.value.trim(),
         budget: form.budget.value.trim(),
         lang: currentLang,
-        source: "infobackground1-landing",
-        ts: new Date().toISOString(),
+        idempotencyKey: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now())),
       };
       try{
-        await fetch("https://n8n-production-3fb6.up.railway.app/webhook/4208f5b9-5628-4606-bed9-9fa9e85f139c",{
+        const res = await fetch(LEAD_API_URL, {
           method:"POST",
           headers:{"Content-Type":"application/json"},
           body: JSON.stringify(payload),
         });
-      }catch(err){ /* даже при сетевой ошибке показываем успех — заявку дублируют мессенджеры */ }
+        if(!res.ok) console.error("Lead submit failed:", res.status, await res.text().catch(()=>""));
+      }catch(err){
+        // Даже при сетевой ошибке показываем успех — заявку дублируют мессенджеры
+        // (Telegram/Instagram/Email в блоке контактов), поэтому пользователь
+        // не остаётся без способа связаться с нами.
+        console.error("Lead submit threw:", err);
+      }
       form.classList.add("is-sent");
       form.reset();
       btn.disabled = false;
