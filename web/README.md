@@ -78,9 +78,13 @@ it's locked to an explicit origin allow-list (not a wildcard) via
   static site's real domain is finalized.
 - Requests from a disallowed `Origin` get `403 origin_not_allowed`.
 
-`index.html` currently points at a placeholder —
-`LEAD_API_URL` near the top of its form script needs to be updated to
-this app's real deployed origin before the static site can deliver leads.
+`index.html` points `LEAD_API_URL` at `https://infobackground.com/api/lead`
+— i.e. this app is expected to be deployed on the same production domain
+as the static site, making the real request same-origin (CORS only
+actually matters for local testing, e.g. running the static file via
+`python3 -m http.server 8000` against `next dev` on `localhost:3000`). If
+the production domain ever changes, update `LEAD_API_URL` in `index.html`
+to match.
 
 ### Deploying
 
@@ -91,8 +95,10 @@ this app's real deployed origin before the static site can deliver leads.
    project to the Production environment only.** Preview deploys sharing
    the same values will pollute real analytics data and spam the real
    Telegram chat with every PR's test submissions.
-4. Deploy, then update `LEAD_API_URL` in the root `index.html` to point at
-   this deployment's real origin (see previous section).
+4. Deploy under the `infobackground.com` production domain so
+   `LEAD_API_URL` in the root `index.html` (already set to
+   `https://infobackground.com/api/lead`) resolves correctly — see
+   previous section.
 
 ## What's still open
 

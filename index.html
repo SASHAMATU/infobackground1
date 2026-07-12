@@ -1596,11 +1596,7 @@
     // ==========================================================
     // FORM — validation + lead API (Supabase + Telegram, server-side)
     // ==========================================================
-    // TODO before going live: replace with the deployed web/ app's real
-    // origin (Vercel URL or custom domain), e.g. "https://app.infobackground.com".
-    // That app's LEAD_CORS_ORIGIN env var must include this static site's
-    // own origin or the request will be rejected — see web/README.md.
-    const LEAD_API_URL = "https://TODO-REPLACE-WITH-DEPLOYED-APP-ORIGIN.example/api/lead";
+    const LEAD_API_URL = "https://infobackground.com/api/lead";
     const form = document.getElementById("leadForm");
     const validators = {
       name: v => v.trim().length >= 2,
