@@ -637,8 +637,9 @@
     <!-- HERO -->
     <section class="hero" id="hero">
       <div class="hero__media" aria-hidden="true">
-        <video id="heroVideo" autoplay muted loop playsinline preload="auto" poster="assets/hero-poster.jpg">
-          <source src="assets/hero-video.mp4" type="video/mp4"/>
+        <video id="heroVideo" muted playsinline preload="auto" poster="assets/hero-poster.jpg">
+          <source src="assets/hero-scrub-mobile.mp4" type="video/mp4" media="(max-width: 767px)"/>
+          <source src="assets/hero-scrub-desktop.mp4" type="video/mp4"/>
         </video>
       </div>
       <div class="hero__shade" aria-hidden="true"></div>
@@ -651,9 +652,9 @@
 
       <div class="wrap">
         <p class="eyebrow hero__eyebrow reveal" data-i18n="hero.eyebrow">Лендинги · Сайты · Для бизнеса</p>
-        <h1 class="hero__title reveal" data-d="1" data-i18n="hero.title">Делаем сайты, <span class="drama">которые продают.</span></h1>
-        <p class="hero__sub reveal" data-d="2" data-i18n="hero.sub">Лендинги и сайты для бизнеса и частных предпринимателей: быстро, качественно и без космических бюджетов. От первого созвона до запуска — 7–14 дней.</p>
-        <div class="hero__cta reveal" data-d="3">
+        <h1 class="hero__title" data-i18n="hero.title">Делаем сайты, <span class="drama">которые продают.</span></h1>
+        <p class="hero__sub" data-i18n="hero.sub">Лендинги и сайты для бизнеса и частных предпринимателей: быстро, качественно и без космических бюджетов. От первого созвона до запуска — 7–14 дней.</p>
+        <div class="hero__cta">
           <a class="btn btn--primary" href="#contact"><span data-i18n="hero.cta1">Обсудить проект</span>
             <svg viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M3 9h11M10 4.5 14.5 9 10 13.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </a>
@@ -1038,6 +1039,12 @@
     </div>
   </footer>
 
+  <!-- Hero scroll-scrub: GSAP + ScrollTrigger drive the video frame,
+       Lenis feeds ScrollTrigger a smoothed scroll position. -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+
   <script>
     // ==========================================================
     // I18N — RU / EN / UA
@@ -1405,50 +1412,133 @@
     track.innerHTML += track.innerHTML;
 
     // ==========================================================
-    // HERO VIDEO — the file itself is a ping-pong loop
+    // HERO SCROLL-SCRUB — video never plays on its own; GSAP
+    // ScrollTrigger's scroll progress drives video.currentTime, and
+    // the same timeline fades the heading/subhead/CTA in and out.
+    // Lenis feeds ScrollTrigger a smoothed scroll position.
     // ==========================================================
-    const heroVideo = document.getElementById("heroVideo");
-    const conn = navigator.connection || navigator.webkitConnection;
-    const lowData = !!(conn && (conn.saveData || /^(slow-2g|2g)$/.test(conn.effectiveType || "")));
-    if(reduceMotion || lowData){
-      heroVideo.pause();
-      heroVideo.removeAttribute("autoplay");
-      heroVideo.removeAttribute("src");
-      heroVideo.querySelectorAll("source").forEach(s=>s.remove());
-      heroVideo.load();
-    }else{
-      heroVideo.playbackRate = 0.65;
-      const revealVideo = ()=>heroVideo.classList.add("is-ready");
-      if(heroVideo.readyState >= 3) revealVideo();
-      else heroVideo.addEventListener("canplay", revealVideo, {once:true});
-    }
+    (function(){
+      const heroVideo = document.getElementById("heroVideo");
+      const heroSection = document.getElementById("hero");
+      if(!heroVideo || !heroSection) return;
+
+      const heroTitle = heroSection.querySelector(".hero__title");
+      const heroSub = heroSection.querySelector(".hero__sub");
+      const heroCta = heroSection.querySelector(".hero__cta");
+
+      const conn = navigator.connection || navigator.webkitConnection;
+      const lowData = !!(conn && (conn.saveData || /^(slow-2g|2g)$/.test(conn.effectiveType || "")));
+
+      function showPosterOnly(){
+        heroVideo.pause();
+        heroVideo.removeAttribute("preload");
+        heroVideo.querySelectorAll("source").forEach(s=>s.remove());
+        heroVideo.load();
+      }
+
+      // Reduced motion / save-data: static poster background, no pin,
+      // no scrub — text is already visible (no hiding class applied
+      // unless/until initScrub() below actually runs).
+      if(reduceMotion || lowData){
+        showPosterOnly();
+        return;
+      }
+
+      if(typeof gsap === "undefined" || typeof ScrollTrigger === "undefined" || typeof Lenis === "undefined"){
+        console.error("Hero scrub: GSAP/ScrollTrigger/Lenis failed to load — showing static poster instead.");
+        showPosterOnly();
+        return;
+      }
+      gsap.registerPlugin(ScrollTrigger);
+
+      // Reuse a shared Lenis instance if one already exists on the
+      // page; otherwise create it and wire it into ScrollTrigger.
+      let lenis = window.__lenis;
+      if(!lenis){
+        lenis = new Lenis();
+        window.__lenis = lenis;
+        lenis.on("scroll", ScrollTrigger.update);
+        gsap.ticker.add(time => lenis.raf(time * 1000));
+        gsap.ticker.lagSmoothing(0);
+      }
+
+      function revealVideo(){ heroVideo.classList.add("is-ready"); }
+
+      let activeTimeline = null;
+
+      function initScrub(){
+        if(!isFinite(heroVideo.duration) || heroVideo.duration <= 0){
+          showPosterOnly();
+          return;
+        }
+
+        let target = 0, current = 0, rafId = null;
+        function tick(){
+          current += (target - current) * 0.12;
+          if(Math.abs(target - current) > 0.001){
+            heroVideo.currentTime = current;
+            rafId = requestAnimationFrame(tick);
+          }else{
+            current = target;
+            heroVideo.currentTime = current;
+            rafId = null;
+          }
+        }
+        function requestTick(){
+          if(rafId === null) rafId = requestAnimationFrame(tick);
+        }
+
+        const st = {
+          trigger: heroSection,
+          start: "top top",
+          end: "+=250%",
+          scrub: true,
+          pin: true,
+          onUpdate: self=>{
+            target = self.progress * heroVideo.duration;
+            requestTick();
+          },
+        };
+        activeTimeline = gsap.timeline({ scrollTrigger: st });
+        if(heroTitle) activeTimeline.to(heroTitle, {autoAlpha:0, y:-40, ease:"power2.out", duration:.33}, 0);
+        if(heroSub) activeTimeline.fromTo(heroSub, {autoAlpha:0}, {autoAlpha:1, ease:"power2.out", duration:.34}, .33);
+        if(heroCta) activeTimeline.fromTo(heroCta, {autoAlpha:0, y:20}, {autoAlpha:1, y:0, ease:"power2.out", duration:.33}, .67);
+
+        revealVideo();
+      }
+
+      // Single error handler covers both "failed before metadata" and
+      // "failed mid-scrub" — always falls back to the static poster,
+      // and additionally unwinds the timeline/pin if one was built.
+      heroVideo.addEventListener("error", ()=>{
+        console.error("Hero scrub: video failed to load — falling back to static poster.");
+        showPosterOnly();
+        if(activeTimeline){
+          activeTimeline.scrollTrigger && activeTimeline.scrollTrigger.kill();
+          activeTimeline.kill();
+          gsap.set([heroTitle, heroSub, heroCta].filter(Boolean), {clearProps:"all"});
+          activeTimeline = null;
+        }
+      }, {once:true});
+
+      if(heroVideo.readyState >= 1 && heroVideo.duration) initScrub();
+      else heroVideo.addEventListener("loadedmetadata", initScrub, {once:true});
+    })();
 
     // ==========================================================
-    // HERO PARALLAX — ambient glow drift + subtle media parallax
+    // HERO GLOW — ambient blob drift follows the pointer (desktop only)
     // ==========================================================
-    const heroSection = document.getElementById("hero");
-    const heroMedia = heroSection.querySelector(".hero__media");
-    const heroGlow = heroSection.querySelector(".hero__glow");
-    if(!reduceMotion){
-      if(matchMedia("(pointer: fine)").matches){
+    (function(){
+      const heroSection = document.getElementById("hero");
+      const heroGlow = heroSection.querySelector(".hero__glow");
+      if(!reduceMotion && matchMedia("(pointer: fine)").matches){
         heroSection.addEventListener("mousemove", e=>{
           const px = e.clientX / innerWidth - .5, py = e.clientY / innerHeight - .5;
           heroGlow.style.transform = `translate3d(${(px*18).toFixed(1)}px, ${(py*14).toFixed(1)}px, 0)`;
         }, {passive:true});
         heroSection.addEventListener("mouseleave", ()=>{ heroGlow.style.transform = ""; });
       }
-      let parallaxTicking = false;
-      addEventListener("scroll", ()=>{
-        if(parallaxTicking) return;
-        parallaxTicking = true;
-        requestAnimationFrame(()=>{
-          if(scrollY < heroSection.offsetHeight + 200){
-            heroMedia.style.transform = `translate3d(0, ${(scrollY*.16).toFixed(1)}px, 0)`;
-          }
-          parallaxTicking = false;
-        });
-      }, {passive:true});
-    }
+    })();
 
     // ==========================================================
     // REVEAL on scroll
