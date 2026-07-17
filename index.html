@@ -1686,7 +1686,8 @@
     // ==========================================================
     // FORM — validation + lead API (Supabase + Telegram, server-side)
     // ==========================================================
-    const LEAD_API_URL = "/api/lead";
+    const LEAD_API_URL = "https://kqiytgxifkaiszmbbbst.supabase.co/functions/v1/notify-lead";
+    const SUPABASE_ANON = "sb_publishable_GwE7eoCCcnK0nCcW11tPxw_8kZn2avj";
     const form = document.getElementById("leadForm");
     const validators = {
       name: v => v.trim().length >= 2,
@@ -1710,7 +1711,7 @@
       const payload = {
         name: form.name.value.trim(),
         contact: form.contact.value.trim(),
-        service: form.service.value,
+       site_type: form.service.value,
         task: form.task.value.trim(),
         budget: form.budget.value.trim(),
         lang: currentLang,
@@ -1719,7 +1720,11 @@
       try{
         const res = await fetch(LEAD_API_URL, {
           method:"POST",
-          headers:{"Content-Type":"application/json"},
+         headers:{
+          "Content-Type":"application/json",
+          "apikey": SUPABASE_ANON,
+          "Authorization": "Bearer " + SUPABASE_ANON
+        },
           body: JSON.stringify(payload),
         });
         if(!res.ok) console.error("Lead submit failed:", res.status, await res.text().catch(()=>""));
